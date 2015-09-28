@@ -1,7 +1,9 @@
 import uuid
+
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFound
 from pyramid.view import view_config
+
 from augeias.stores.error import NotFoundException
 
 
@@ -46,33 +48,47 @@ class AugeiasView(object):
     @view_config(route_name='update_object')
     def update_object(self):
         '''update an object in the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
         object_data = self._get_object_data()
-        store.update_object(container_key, object_key, object_data)
+        collection.object_store.update_object(container_key, object_key, object_data)
         res = Response(content_type='application/json', status=200)
-        res.json_body = {'container_key': container_key, 'object_key': object_key}
+        res.json_body = {
+            'container_key': container_key,
+            'object_key': object_key,
+            'uri': collection.uri_generator.generate_object_uri(
+                collection=collection.name,
+                container=container_key,
+                object=object_key)
+        }
         return res
 
     @view_config(route_name='delete_object')
     def delete_object(self):
         '''delete an object from the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
-        store.delete_object(container_key, object_key)
+        collection.object_store.delete_object(container_key, object_key)
         res = Response(content_type='application/json', status=200)
-        res.json_body = {'container_key': container_key, 'object_key': object_key}
+        res.json_body = {
+            'container_key': container_key,
+            'object_key': object_key,
+            'uri': collection.uri_generator.generate_object_uri(
+                collection=collection.name,
+                container=container_key,
+                object=object_key)
+        }
         return res
 
     @view_config(route_name='get_object')
     def get_object(self):
         '''retrieve an object from the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
-        object_data = store.get_object(container_key, object_key)
+        object_data = collection.object_store.get_object(container_key, object_key)
         res = Response(content_type='application/octet-stream', status=200)
         res.body = object_data
         return res
@@ -80,46 +96,61 @@ class AugeiasView(object):
     @view_config(route_name='list_object_keys_for_container')
     def list_object_keys_for_container(self):
         '''list all object keys for a container in the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
         res = Response(content_type='application/json', status=200)
-        res.json_body = store.list_object_keys_for_container(container_key)
+        res.json_body = collection.object_store.list_object_keys_for_container(container_key)
         return res
 
     @view_config(route_name='create_container')
     def create_container(self):
         '''create a new container in the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
-        store.create_container(container_key)
+        collection.object_store.create_container(container_key)
         res = Response(content_type='application/json', status=200)
-        res.json_body = {'container_key': container_key}
+        res.json_body = {
+            'container_key': container_key,
+            'uri': collection.uri_generator.generate_container_uri(
+                collection=collection.name,
+                container=container_key)
+        }
         return res
 
     @view_config(route_name='create_container_and_id')
     def create_container_and_id(self):
         '''create a new container in the data store and generate an id'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = str(uuid.uuid4())
-        store.create_container(container_key)
+        collection.object_store.create_container(container_key)
         res = Response(content_type='application/json', status=201)
-        res.json_body = {'container_key': container_key}
+        res.json_body = {
+            'container_key': container_key,
+            'uri': collection.uri_generator.generate_container_uri(
+                collection=collection.name,
+                container=container_key)
+        }
         return res
 
     @view_config(route_name='delete_container')
     def delete_container(self):
         '''delete a container in the data store'''
-        store = self.retrieve_object_store()
+        collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
-        store.delete_container(container_key)
+        collection.object_store.delete_container(container_key)
         res = Response(content_type='application/json', status=200)
-        res.json_body = {'container_key': container_key}
+        res.json_body = {
+            'container_key': container_key,
+            'uri': collection.uri_generator.generate_container_uri(
+                collection=collection.name,
+                container=container_key)
+        }
         return res
 
-    def retrieve_object_store(self):
+    def retrieve_collection(self):
         collection_name = self.request.matchdict['collection_key']
         if collection_name in self.request.registry.collections:
-            store = self.request.registry.collections[collection_name].object_store
+            collection = self.request.registry.collections[collection_name]
         else:
             raise HTTPNotFound('collection not found')
-        return store
+        return collection
