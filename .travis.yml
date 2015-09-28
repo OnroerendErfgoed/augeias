@@ -3,7 +3,7 @@ sudo: false
 python:
   - "2.7"
 env:
-  - PROJECT=storageprovider
+  - PROJECT=augeias
 notifications:
   email:
     - klaas.millet@rwo.vlaanderen.be
