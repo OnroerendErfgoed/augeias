@@ -2,7 +2,7 @@
 Services
 ========
 
-The storageprovider provides services on `Collections`, `Containers` and
+The augeias provides services on `Collections`, `Containers` and
 `Objects`. You can think of them as a three-leveled hierarchy. At the top there
 are the collections. Each collection contains containers. And within each
 container are 1 or more objects.
@@ -20,7 +20,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         GET /collections HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**
@@ -33,10 +33,10 @@ container are 1 or more objects.
         [
             {
                 'collection_key': 'default',
-                'uri': 'https://storageprovider.onroerenderfgoed.be/collections/default'
+                'uri': 'https://augeias.onroerenderfgoed.be/collections/default'
             } , {
                 'collection_key': 'my_collection',
-                'uri': 'https://storageprovider.onroerenderfgoed.be/collections/my_collection'
+                'uri': 'https://augeias.onroerenderfgoed.be/collections/my_collection'
             }
         ]
 
@@ -57,7 +57,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         POST /collections/mine/containers HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:
@@ -66,11 +66,11 @@ container are 1 or more objects.
 
         HTTP/1.1 201 Created
         Content-Type: application/json
-        Location: https://storageprovider.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
+        Location: https://augeias.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
 
         {
             'container_key': '6ed5a007-41cf-49ed-8cb8-184fa5f48e42',
-            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
+            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
         }
 
     :param collection_key: Key for the collection within which the container
@@ -98,7 +98,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         PUT /collections/mine/containers/abcd HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:
@@ -107,11 +107,11 @@ container are 1 or more objects.
 
         HTTP/1.1 201 Created
         Content-Type: application/json
-        Location: https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd
+        Location: https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd
 
         {
             'container_key': 'abcd'
-            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd'
+            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd'
         }
 
     :param collection_key: Key for the collection within which the container
@@ -140,7 +140,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         DELETE /collections/mine/containers/abcd HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:
@@ -152,7 +152,7 @@ container are 1 or more objects.
 
         {
             'container_key': 'abcd'
-            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd'
+            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd'
         }
 
     :param collection_key: Key for the collection where the container lives.
@@ -179,7 +179,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06 HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:
@@ -222,7 +222,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:
@@ -256,7 +256,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Exmaple response**:
@@ -298,7 +298,7 @@ container are 1 or more objects.
     .. sourcecode:: http
 
         DELETE /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
-        Host: storageprovider.onroerenderfgoed.be
+        Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
     **Example response**:

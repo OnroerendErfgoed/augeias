@@ -1,9 +1,9 @@
 import os
 import unittest
 import tempdir
-from storageprovider.stores.CephStore import CephStore
-from storageprovider.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
-from storageprovider.stores.error import NotFoundException
+from augeias.stores.CephStore import CephStore
+from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
+from augeias.stores.error import NotFoundException
 
 
 class TestPairTreeStore(unittest.TestCase):

@@ -1,6 +1,6 @@
 from pairtree import PairtreeStorageFactory, PartNotFoundException, ObjectNotFoundException
-from storageprovider.stores.StoreInterface import IStore
-from storageprovider.stores.error import NotFoundException
+from augeias.stores.StoreInterface import IStore
+from augeias.stores.error import NotFoundException
 
 
 class PairTreeFileSystemStore(IStore):

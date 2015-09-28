@@ -1,4 +1,4 @@
-from storageprovider.stores.StoreInterface import IStore
+from augeias.stores.StoreInterface import IStore
 
 
 class CephStore(IStore):

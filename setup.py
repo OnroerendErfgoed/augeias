@@ -12,9 +12,9 @@ requires = [
     'pyramid',
     ]
 
-setup(name='storageprovider',
-      version='1.0.3',
-      description='storageprovider',
+setup(name='augeias',
+      version='0.1.0',
+      description='augeias',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
         "Programming Language :: Python",
@@ -31,9 +31,9 @@ setup(name='storageprovider',
       zip_safe=False,
       install_requires=requires,
       tests_require=requires,
-      test_suite="storageprovider",
+      test_suite="augeias",
       entry_points="""\
       [paste.app_factory]
-      main = storageprovider:main
+      main = augeias:main
       """,
       )

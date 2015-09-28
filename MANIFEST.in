@@ -1,3 +1,3 @@
 include *.txt *.ini *.cfg *.rst
-recursive-include storageprovider *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+recursive-include augeias *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
 prune tests

@@ -4,7 +4,7 @@ try:
 except ImportError:
     from mock import Mock  # pragma: no cover
 from pyramid import testing
-from storageprovider.views import StorageProviderView
+from augeias.views import AugeiasView
 
 
 class ViewTests(unittest.TestCase):
@@ -13,11 +13,11 @@ class ViewTests(unittest.TestCase):
         self.request = testing.DummyRequest()
         self.request.registry = Mock()
         self.request.registry.object_store = Mock()
-        self.view = StorageProviderView(self.request)
+        self.view = AugeiasView(self.request)
 
     def tearDown(self):
         testing.tearDown()
 
     def test_my_view(self):
         info = self.view.my_view()
-        self.assertEqual(info['project'], 'storageprovider')
+        self.assertEqual(info['project'], 'augeias')

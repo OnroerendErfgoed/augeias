@@ -3,7 +3,7 @@ Contributing
 
 Augeias is being developed as open source software by the 
 [Flanders Heritage Agency]. All development is done on the agency's 
-[Github page for Atramhasis].
+[Github page for Augeias].
 
 Since we place a lot of importance of code quality, we expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and

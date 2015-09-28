@@ -1,5 +1,5 @@
 import unittest
-from storageprovider.stores.error import NotFoundException
+from augeias.stores.error import NotFoundException
 
 
 class TestErrors(unittest.TestCase):

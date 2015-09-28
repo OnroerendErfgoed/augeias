@@ -29,8 +29,8 @@ def main(global_config, **settings):
     config.add_route('get_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="GET")
 
-    if asbool(settings.get('storageprovider.init_collections', True)):  # pragma: no cover
-        config.include('storageprovider.collections')
+    if asbool(settings.get('augeias.init_collections', True)):  # pragma: no cover
+        config.include('augeias.collections')
 
     config.scan()
     return config.make_wsgi_app()

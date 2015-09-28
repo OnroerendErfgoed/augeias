@@ -2,7 +2,7 @@ import uuid
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFound
 from pyramid.view import view_config
-from storageprovider.stores.error import NotFoundException
+from augeias.stores.error import NotFoundException
 
 
 @view_config(context=NotFoundException, renderer='json')
@@ -11,7 +11,7 @@ def failed_not_found(exc, request):
     return {'message': exc.value}
 
 
-class StorageProviderView(object):
+class AugeiasView(object):
 
     @staticmethod
     def _is_long(s):
@@ -26,7 +26,7 @@ class StorageProviderView(object):
 
     @view_config(route_name='home', renderer='json')
     def my_view(self):
-        return {'project': 'storageprovider'}
+        return {'project': 'augeias'}
 
     def _get_object_data(self):
         if 'Content-Length' not in self.request.headers or not self._is_long(self.request.headers['Content-Length']):

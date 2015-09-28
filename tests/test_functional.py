@@ -4,10 +4,10 @@ import unittest
 import tempdir
 from pyramid.paster import get_appsettings
 from webtest import TestApp
-from storageprovider import main
+from augeias import main
 import ast
-from storageprovider.collections import Collection
-from storageprovider.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
+from augeias.collections import Collection
+from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, 'conf_test.ini'))

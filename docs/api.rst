@@ -2,21 +2,21 @@
 API Documentation
 =================
 
-.. automodule:: storageprovider.stores.StoreInterface
+.. automodule:: augeias.stores.StoreInterface
 
 
 Store Interface
--------------
+---------------
 
-.. autoclass:: storageprovider.stores.StoreInterface.IStore
+.. autoclass:: augeias.stores.StoreInterface.IStore
     :members:
 
 Implementations
 ---------------
-.. autoclass:: storageprovider.stores.PairTreeFileSystemStore(IStore)
+.. autoclass:: augeias.stores.PairTreeFileSystemStore.PairTreeFileSystemStore(IStore)
    :members:
 
-.. autoclass:: storageprovider.stores.CephStore
+.. autoclass:: augeias.stores.CephStore.CephStore(IStore)
    :members:
 
 
