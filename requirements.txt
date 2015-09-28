@@ -1,0 +1,15 @@
+# pyramid
+pyramid==1.5
+pyramid_rewrite==0.2
+
+# pairtree
+pairtree>=0.5.8
+
+venusian==1.0
+webob==1.4
+PasteDeploy==1.5.2
+
+repoze.lru==0.6
+zope.deprecation==4.1.1
+zope.interface==4.1.1
+translationstring==1.1

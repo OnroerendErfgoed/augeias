@@ -1,0 +1,321 @@
+========
+Services
+========
+
+The storageprovider provides services on `Collections`, `Containers` and
+`Objects`. You can think of them as a three-leveled hierarchy. At the top there
+are the collections. Each collection contains containers. And within each
+container are 1 or more objects.
+
+
+.. http:get:: /collections
+
+    Show a list of all collections. Every collection is a set of containers.
+    They might have some sort of meaning as defined by the implementer. In
+    practice quite often there will be a collection for every application.
+
+
+    **Example request**
+
+    .. sourcecode:: http
+
+        GET /collections HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            {
+                'collection_key': 'default',
+                'uri': 'https://storageprovider.onroerenderfgoed.be/collections/default'
+            } , {
+                'collection_key': 'my_collection',
+                'uri': 'https://storageprovider.onroerenderfgoed.be/collections/my_collection'
+            }
+        ]
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+
+.. http:post:: /collections/{collection_key}/containers
+
+    Create a new container. The server will generate a random container key.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        POST /collections/mine/containers HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+        Location: https://storageprovider.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
+
+        {
+            'container_key': '6ed5a007-41cf-49ed-8cb8-184fa5f48e42',
+            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
+        }
+
+    :param collection_key: Key for the collection within which the container
+        will be placed.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Location: The url where the newly added container can be found.
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 201: The container was added succesfully.
+    :statuscode 404: The collection `collection_key` does not exist.
+
+
+.. http:put:: /collections/{collection_key}/containers/{container_key}
+
+    Create a new container. Allowsyou to choose your own container key. If the
+    container already exists, nothing will happen.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        PUT /collections/mine/containers/abcd HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+        Location: https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd
+
+        {
+            'container_key': 'abcd'
+            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd'
+        }
+
+    :param collection_key: Key for the collection within which the container
+        will be placed.
+    :param container_key: Key for the container that will be created.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Location: The url where the newly added container can be found.
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The container already existed.
+    :statuscode 201: The container was added succesfully.
+    :statuscode 404: The collection `collection_key` does not exist.
+
+
+.. http:delete:: /collections/{collection_key}/containers/{container_key}
+
+    Remove a container and all the objects in it.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        DELETE /collections/mine/containers/abcd HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            'container_key': 'abcd'
+            'uri': 'https://storageprovider.onroerenderfgoed.be/collections/mine/containers/abcd'
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container that will be deleted.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The container was deleted.
+    :statuscode 404: The collection `collection_key` does not exist or the
+        container `container_key` does not exist within this collection.
+
+
+.. http:get:: /collections/{collection_key}/container/{container_key}
+
+    Show all objects present in this container.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06 HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            "square",
+            "small",
+            "medium",
+            "original",
+            "large",
+            "full"
+        ]
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container that will be queried.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The container exists.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
+
+.. http:get:: /collections/{collection_key}/containers/{container_key}/{object_key}
+
+    Fetch an object from a container.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    ..sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-type: image/jpeg
+
+        <snipped>
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be fetched
+
+    :statuscode 200: The object was found.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` or the `object_key` does not exist.
+
+
+.. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
+
+    Add or update an object in a container.
+
+    If an object with this key already exists, it will be overwritten. If not,
+    it will be created.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Exmaple response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
+            'object_key': 'circle',
+            'container_key': 'a311efb7-f125-4d0a-aa26-69d3657a2d06',
+            'collection_key': 'mine'
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be created or updated.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The object was updated.
+    :statuscode 201: There was no object present with this key, it was created.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
+
+.. http:delete:: /collections/{collection_key}/containers/{container_key}/{object_key}
+
+    Delete an object from a container.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        DELETE /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        Host: storageprovider.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
+            "object_key":"full",
+            "container_key":"a311efb7-f125-4d0a-aa26-69d3657a2d06",
+            "collection_key": "mine"
+        }
+
+    :statuscode 200: The object was deleted.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` or the `object_key` does not exist.
+

@@ -1,0 +1,16 @@
+language: python
+sudo: false
+python:
+  - "2.7"
+env:
+  - PROJECT=storageprovider
+notifications:
+  email:
+    - klaas.millet@rwo.vlaanderen.be
+    - bart.saelen@geosolutions.be
+    - wouter.claeys@rwo.vlaanderen.be
+install: 
+  - pip install -r requirements-dev.txt
+  - python setup.py develop
+script: 
+  py.test --cov $PROJECT --cov-report term-missing tests
