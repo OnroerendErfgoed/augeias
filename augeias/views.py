@@ -39,13 +39,13 @@ class AugeiasView(object):
             raise HTTPBadRequest('body is empty')
         return object_data
 
-    @view_config(route_name='list_collections')
+    @view_config(route_name='list_collections', permission='view')
     def list_collections(self):
         res = Response(content_type='application/json', status=200)
         res.json_body = [c for c in self.request.registry.collections]
         return res
 
-    @view_config(route_name='update_object')
+    @view_config(route_name='update_object', permission='edit')
     def update_object(self):
         '''update an object in the data store'''
         collection = self.retrieve_collection()
@@ -64,7 +64,7 @@ class AugeiasView(object):
         }
         return res
 
-    @view_config(route_name='delete_object')
+    @view_config(route_name='delete_object', permission='edit')
     def delete_object(self):
         '''delete an object from the data store'''
         collection = self.retrieve_collection()
@@ -82,7 +82,7 @@ class AugeiasView(object):
         }
         return res
 
-    @view_config(route_name='get_object')
+    @view_config(route_name='get_object', permission='view')
     def get_object(self):
         '''retrieve an object from the data store'''
         collection = self.retrieve_collection()
@@ -93,7 +93,7 @@ class AugeiasView(object):
         res.body = object_data
         return res
 
-    @view_config(route_name='list_object_keys_for_container')
+    @view_config(route_name='list_object_keys_for_container', permission='view')
     def list_object_keys_for_container(self):
         '''list all object keys for a container in the data store'''
         collection = self.retrieve_collection()
@@ -102,7 +102,7 @@ class AugeiasView(object):
         res.json_body = collection.object_store.list_object_keys_for_container(container_key)
         return res
 
-    @view_config(route_name='create_container')
+    @view_config(route_name='create_container', permission='edit')
     def create_container(self):
         '''create a new container in the data store'''
         collection = self.retrieve_collection()
@@ -117,7 +117,7 @@ class AugeiasView(object):
         }
         return res
 
-    @view_config(route_name='create_container_and_id')
+    @view_config(route_name='create_container_and_id', permission='edit')
     def create_container_and_id(self):
         '''create a new container in the data store and generate an id'''
         collection = self.retrieve_collection()
@@ -132,7 +132,7 @@ class AugeiasView(object):
         }
         return res
 
-    @view_config(route_name='delete_container')
+    @view_config(route_name='delete_container', permission='edit')
     def delete_container(self):
         '''delete a container in the data store'''
         collection = self.retrieve_collection()
