@@ -20,7 +20,7 @@ class ValidationFailure(Exception):
 
 @view_config(context=ValidationFailure, renderer='json')
 def failed_validation(exc, request):
-    request.response.status_int = 500
+    request.response.status_int = 400
     return {'message': 'Failed validation: %s' % exc.msg}
 
 

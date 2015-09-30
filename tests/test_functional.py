@@ -156,7 +156,7 @@ class FunctionalTests(unittest.TestCase):
         with open(testdata, 'rb') as f:
             bdata = f.read()
         res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/1', bdata,
-                               expect_errors=True, status=500)
+                               expect_errors=True, status=400)
         self.assertDictEqual({u'message': u'Failed validation: The object key must be 3 characters long'},
                              res.json_body)
 
