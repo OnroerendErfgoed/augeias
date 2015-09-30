@@ -33,10 +33,10 @@ container are 1 or more objects.
         [
             {
                 'collection_key': 'default',
-                'uri': 'https://augeias.onroerenderfgoed.be/collections/default'
+                'uri': 'https://storage.onroerenderfgoed.be/collections/default'
             } , {
                 'collection_key': 'my_collection',
-                'uri': 'https://augeias.onroerenderfgoed.be/collections/my_collection'
+                'uri': 'https://storage.onroerenderfgoed.be/collections/my_collection'
             }
         ]
 
@@ -66,11 +66,11 @@ container are 1 or more objects.
 
         HTTP/1.1 201 Created
         Content-Type: application/json
-        Location: https://augeias.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
+        Location: https://storage.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
 
         {
             'container_key': '6ed5a007-41cf-49ed-8cb8-184fa5f48e42',
-            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
+            'uri': 'https://storage.onroerenderfgoed.be/collections/mine/containers/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
         }
 
     :param collection_key: Key for the collection within which the container
@@ -107,11 +107,11 @@ container are 1 or more objects.
 
         HTTP/1.1 201 Created
         Content-Type: application/json
-        Location: https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd
+        Location: https://storage.onroerenderfgoed.be/collections/mine/containers/abcd
 
         {
             'container_key': 'abcd'
-            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd'
+            'uri': 'https://storage.onroerenderfgoed.be/collections/mine/containers/abcd'
         }
 
     :param collection_key: Key for the collection within which the container
@@ -152,7 +152,7 @@ container are 1 or more objects.
 
         {
             'container_key': 'abcd'
-            'uri': 'https://augeias.onroerenderfgoed.be/collections/mine/containers/abcd'
+            'uri': 'https://storage.onroerenderfgoed.be/collections/mine/containers/abcd'
         }
 
     :param collection_key: Key for the collection where the container lives.

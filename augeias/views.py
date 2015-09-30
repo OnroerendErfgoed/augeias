@@ -13,6 +13,18 @@ def failed_not_found(exc, request):
     return {'message': exc.value}
 
 
+class ValidationFailure(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+
+@view_config(context=ValidationFailure, renderer='json')
+def failed_validation(exc, request):
+    request.response.status_int = 500
+    return {'message': 'Failed validation: %s' % exc.msg}
+
+
+
 class AugeiasView(object):
 
     @staticmethod
@@ -51,6 +63,8 @@ class AugeiasView(object):
         collection = self.retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
+        if len(object_key) < 3:
+            raise ValidationFailure('The object key must be 3 characters long')
         object_data = self._get_object_data()
         collection.object_store.update_object(container_key, object_key, object_data)
         res = Response(content_type='application/json', status=200)

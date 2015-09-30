@@ -149,6 +149,17 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(ubdata, res.body)
         self.assertNotEqual(bdata, res.body)
 
+    def test_update_object_validation_failure(self):
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+        testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/1', bdata,
+                               expect_errors=True, status=500)
+        self.assertDictEqual({u'message': u'Failed validation: The object key must be 3 characters long'},
+                             res.json_body)
+
     def test_delete_object(self):
         # create container and add object
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
