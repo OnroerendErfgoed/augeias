@@ -10,7 +10,8 @@ with open(os.path.join(here, 'HISTORY.rst')) as f:
 
 requires = [
     'pyramid',
-    'pairtree'
+    'pairtree',
+    'pyramid_rewrite'
     ]
 
 setup(name='augeias',
