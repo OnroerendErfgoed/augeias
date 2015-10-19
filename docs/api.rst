@@ -11,20 +11,24 @@ Collections
 Stores
 ======
 
-.. automodule:: augeias.stores.StoreInterface
+Errors
+------
+
+.. automodule:: augeias.stores.error
+    :members:
 
 Store Interface
 ---------------
 
-.. autoclass:: augeias.stores.StoreInterface.IStore
+.. automodule:: augeias.stores.StoreInterface
     :members:
 
 Implementations
 ---------------
-.. autoclass:: augeias.stores.PairTreeFileSystemStore.PairTreeFileSystemStore(IStore)
+.. automodule:: augeias.stores.PairTreeFileSystemStore
    :members:
 
-.. autoclass:: augeias.stores.CephStore.CephStore(IStore)
+.. automodule:: augeias.stores.CephStore
    :members:
 
 Uri

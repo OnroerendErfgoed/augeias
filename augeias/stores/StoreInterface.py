@@ -1,38 +1,84 @@
+# -*- coding: utf-8 -*-
 '''
-This interface handles object-storage.
-Implementations of this interface can be made for different object-storages
-Currently this interface is only implemented for PairTreeFileSystemStore
+This module defines the interface every store needs to adhere to.
 '''
 
 from abc import ABCMeta, abstractmethod
 
 class IStore:
+    '''
+    This interface handles object-storage.
+    Implementations of this interface can be made for different object-storages
+    Currently this interface is only implemented for PairTreeFileSystemStore
+    '''
     __metaclass__ = ABCMeta
 
     @abstractmethod
     def create_object(self, container_key, object_key, object_data):
-        '''save a new object in the data store'''
+        '''
+        Save a new object in the data store
+
+        :param str container_key: Key of the container to create an object in.
+        :param str object_key: Key of the object to create.
+        :param str object_data: The data for the object to create.
+        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        '''
 
     @abstractmethod
     def delete_object(self, container_key, object_key):
-        '''delete an object from the data store'''
+        '''
+        Delete an object from the data store.
+
+        :param str container_key: Key of the container that the object lives in.
+        :param str object_key: Key of the object to delete.
+        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        '''
 
     @abstractmethod
     def get_object(self, container_key, object_key):
-        '''retrieve an object from the data store'''
+        '''
+        Retrieve an object from the data store.
+
+        :param str container_key: Key of the container that the object lives in.
+        :param str object_key: Key of the object to retrieve.
+        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        '''
 
     @abstractmethod
     def update_object(self, container_key, object_key, object_data):
-        '''update an object in the data store'''
+        '''
+        Update an object in the data store.
+
+        :param str container_key: Key of the container that the object lives in.
+        :param str object_key: Key of the object to update.
+        :param str object_data: New data for the object.
+        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        '''
 
     @abstractmethod
     def list_object_keys_for_container(self, container_key):
-        '''list all object keys for a container in the data store'''
+        '''
+        List all object keys for a container in the data store.
+
+        :param str container_key: Key of the container to list the objects for.
+        :returns: A list of container keys.
+        :rtype: lst
+        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        '''
 
     @abstractmethod
     def create_container(self, container_key):
-        '''create a new container in the data store'''
+        '''
+        Create a new container in the data store.
+
+        :param str container_key: Key of the container to create.
+        '''
 
     @abstractmethod
     def delete_container(self, container_key):
-        '''delete a container in the data store'''
+        '''
+        Delete a container and all it's objects in the data store. 
+
+        :param str container_key: Key of the container to delete.
+        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        '''
