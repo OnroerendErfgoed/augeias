@@ -7,8 +7,8 @@ Augeias
         :target: https://readthedocs.org/projects/augeias/?badge=latest
 .. image:: https://travis-ci.org/OnroerendErfgoed/augeias.png?branch=master
         :target: https://travis-ci.org/OnroerendErfgoed/augeias
-.. image:: https://coveralls.io/repos/OnroerendErfgoed/augeias/badge.png?branch=master
-        :target: https://coveralls.io/r/OnroerendErfgoed/augeias
+.. image:: https://coveralls.io/repos/OnroerendErfgoed/augeias/badge.svg?branch=master&service=github
+        :target: https://coveralls.io/r/OnroerendErfgoed/augeias?branch=master
 
 Augeias. Stores your shit.
 
