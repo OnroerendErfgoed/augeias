@@ -16,7 +16,7 @@ requires = [
 
 setup(name='augeias',
       version='0.1.0',
-      description='augeias',
+      description='Augeias. Stores your shit.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
