@@ -227,10 +227,13 @@ container are 1 or more objects.
 
     **Example response**:
 
-    ..sourcecode:: http
+    .. sourcecode:: http
 
         HTTP/1.1 200 OK
+        Date: Fri, 30 Oct 2015 07:11:44 GMT
+        Server: Apache/2.4.7 (Ubuntu)
         Content-type: image/jpeg
+        Content-Length: 23562
 
         <snipped>
 
