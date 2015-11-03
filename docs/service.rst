@@ -221,7 +221,7 @@ container are 1 or more objects.
 
     .. sourcecode:: http
 
-        HEAD /collections/mine/container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        HEAD /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
         Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
@@ -253,7 +253,7 @@ container are 1 or more objects.
 
     .. sourcecode:: http
 
-        GET /collections/mine/container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        GET /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
         Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
