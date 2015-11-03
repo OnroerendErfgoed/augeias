@@ -169,7 +169,7 @@ container are 1 or more objects.
         container `container_key` does not exist within this collection.
 
 
-.. http:get:: /collections/{collection_key}/container/{container_key}
+.. http:get:: /collections/{collection_key}/containers/{container_key}
 
     Show all objects present in this container.
 
@@ -178,7 +178,7 @@ container are 1 or more objects.
 
     .. sourcecode:: http
 
-        GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06 HTTP/1.1
+        GET /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06 HTTP/1.1
         Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
@@ -212,6 +212,38 @@ container are 1 or more objects.
         `container_key` does not exist.
 
 
+.. http:head:: /collections/{collection_key}/containers/{container_key}/{object_key}
+
+    Fetch metadata on a object without actually fetching the object.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        HEAD /collections/mine/container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Date: Fri, 30 Oct 2015 07:11:44 GMT
+        Server: Apache/2.4.7 (Ubuntu)
+        Content-type: image/jpeg
+        Content-Length: 23562
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be fetched
+
+    :statuscode 200: The object was found.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` or the `object_key` does not exist.
+
+
 .. http:get:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
     Fetch an object from a container.
@@ -221,7 +253,7 @@ container are 1 or more objects.
 
     .. sourcecode:: http
 
-        GET /container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
+        GET /collections/mine/container/a311efb7-f125-4d0a-aa26-69d3657a2d06/full HTTP/1.1
         Host: augeias.onroerenderfgoed.be
         Accept: application/json
 
