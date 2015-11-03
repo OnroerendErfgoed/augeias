@@ -1,0 +1,19 @@
+from pyramid.config import Configurator
+
+
+def main(global_config, **settings):
+    """ This function returns a Pyramid WSGI application.
+    """
+
+    # Set up pyramid
+    config = Configurator(settings=settings)
+
+    # Set up augeias
+    config.include('augeias')
+
+    #Add collections
+    config.include('{{package}}.collections')
+
+    config.scan()
+
+    return config.make_wsgi_app()

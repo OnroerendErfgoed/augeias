@@ -2,23 +2,43 @@
 API Documentation
 =================
 
-.. automodule:: augeias.stores.StoreInterface
+Collections
+===========
 
+.. automodule:: augeias.collections.model
+    :members:
+
+Stores
+======
+
+Errors
+------
+
+.. automodule:: augeias.stores.error
+    :members:
 
 Store Interface
 ---------------
 
-.. autoclass:: augeias.stores.StoreInterface.IStore
+.. automodule:: augeias.stores.StoreInterface
     :members:
 
 Implementations
 ---------------
-.. autoclass:: augeias.stores.PairTreeFileSystemStore.PairTreeFileSystemStore(IStore)
+.. automodule:: augeias.stores.PairTreeFileSystemStore
    :members:
 
-.. autoclass:: augeias.stores.CephStore.CephStore(IStore)
+.. automodule:: augeias.stores.CephStore
    :members:
 
+Uri
+===
 
+.. automodule:: augeias.uri
+    :members:
 
+Views
+=====
 
+.. automodule:: augeias.views
+    :members:

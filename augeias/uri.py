@@ -46,6 +46,7 @@ class UriPatternGenerator(UriGenerator):
     def generate_collection_uri(self, collection):
         '''
         Generate a :term:`URI` for a collection based on parameters passed.
+
         :param collection: The collection.
         :rtype: string
         '''
@@ -54,6 +55,7 @@ class UriPatternGenerator(UriGenerator):
     def generate_container_uri(self, collection, container):
         '''
         Generate a :term:`URI` for collection and container based on parameters passed.
+
         :param collection: The collection.
         :param container: The container.
         :rtype: string
@@ -63,6 +65,7 @@ class UriPatternGenerator(UriGenerator):
     def generate_object_uri(self, collection, container, object):
         '''
         Generate a :term:`URI` for collections, container and object based on parameters passed.
+
         :param collection: The collection.
         :param container: The container.
         :param object: The object.
@@ -74,6 +77,7 @@ class UriPatternGenerator(UriGenerator):
 class DefaultUriGenerator(UriGenerator):
     '''
     Generate a `URI` specific to storageprovider.
+
     Used for providers that do not implement a specific :class:`UriGenerator`.
     '''
     def __init__(self, pattern='https://storage.onroerenderfgoed.be/'):
@@ -82,6 +86,7 @@ class DefaultUriGenerator(UriGenerator):
     def generate_collection_uri(self, collection):
         '''
         Generate a :term:`URI` for collections based on parameters passed.
+
         :param collection: The collection.
         :rtype: string
         '''
@@ -90,6 +95,7 @@ class DefaultUriGenerator(UriGenerator):
     def generate_container_uri(self, collection, container):
         '''
         Generate a :term:`URI` for collection and container based on parameters passed.
+
         :param collection: The collection.
         :param container: The container.
         :rtype: string
@@ -99,6 +105,7 @@ class DefaultUriGenerator(UriGenerator):
     def generate_object_uri(self, collection, container, object):
         '''
         Generate a :term:`URI` for collections, container and object based on parameters passed.
+
         :param collection: The collection.
         :param container: The container.
         :param object: The object.

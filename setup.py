@@ -10,22 +10,27 @@ with open(os.path.join(here, 'HISTORY.rst')) as f:
 
 requires = [
     'pyramid',
+    'pairtree',
+    'pyramid_rewrite'
     ]
 
 setup(name='augeias',
-      version='0.1.0',
-      description='augeias',
+      version='0.2.0.dev0',
+      description='Augeias. Stores your shit.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
-      author='',
-      author_email='',
-      url='',
-      keywords='web pyramid pylons',
+        "Programming Language :: Python :: 2.7",
+      ],
+      author='Flanders Heritage Agency',
+      author_email='ict@onroerenderfgoed.be',
+      url='https://augeias.readthedocs.org',
+      keywords='web pyramid digital object storage',
+      license='GPLv3',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
@@ -33,6 +38,8 @@ setup(name='augeias',
       tests_require=requires,
       test_suite="augeias",
       entry_points="""\
+      [pyramid.scaffold]
+      augeias = augeias.scaffolds:AugeiasTemplate
       [paste.app_factory]
       main = augeias:main
       """,

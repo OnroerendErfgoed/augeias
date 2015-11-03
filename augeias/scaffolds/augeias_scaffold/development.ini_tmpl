@@ -3,28 +3,30 @@
 # http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/environment.html
 ###
 
-
 [app:main]
-use = egg:augeias
+use = egg:{{project}}
 
-pyramid.reload_templates = false
 pyramid.debug_authorization = false
 pyramid.debug_notfound = false
 pyramid.debug_routematch = false
 pyramid.default_locale_name = en
+pyramid.includes =
+    pyramid_debugtoolbar
 
-augeias.init_collections = true
+default.store.data_dir = %(here)s/data
+
+# By default, the toolbar only appears for clients from IP addresses
+# '127.0.0.1' and '::1'.
+# debugtoolbar.hosts = 127.0.0.1 ::1
 
 ###
 # wsgi server configuration
 ###
 
 [server:main]
-use = egg:gunicorn#main
+use = egg:waitress#main
 host = 0.0.0.0
-port = 8080
-workers = 2
-worker_class = gevent
+port = 6543
 
 ###
 # logging configuration
@@ -32,7 +34,7 @@ worker_class = gevent
 ###
 
 [loggers]
-keys = root, augeias
+keys = root, augeias, sqlalchemy, {{package_logger}}
 
 [handlers]
 keys = console
@@ -41,13 +43,26 @@ keys = console
 keys = generic
 
 [logger_root]
-level = WARN
+level = INFO
 handlers = console
 
 [logger_augeias]
-level = WARN
+level = DEBUG
 handlers =
 qualname = augeias
+
+[logger_sqlalchemy]
+level = INFO
+handlers =
+qualname = sqlalchemy.engine
+# "level = INFO" logs SQL queries.
+# "level = DEBUG" logs SQL queries and results.
+# "level = WARN" logs neither.  (Recommended for production systems.)
+
+[logger_{{package_logger}}]
+level = DEBUG
+handlers =
+qualname = {{package}}
 
 [handler_console]
 class = StreamHandler
