@@ -15,7 +15,7 @@ requires = [
     ]
 
 setup(name='augeias',
-      version='0.1.0',
+      version='0.2.0.dev0',
       description='Augeias. Stores your shit.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
@@ -38,6 +38,8 @@ setup(name='augeias',
       tests_require=requires,
       test_suite="augeias",
       entry_points="""\
+      [pyramid.scaffold]
+      augeias = augeias.scaffolds:AugeiasTemplate
       [paste.app_factory]
       main = augeias:main
       """,

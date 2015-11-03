@@ -1,3 +1,9 @@
+0.2.0 (??-??-2015)
+------------------
+
+- Add a scaffold for generating an Augeias instance. Use by running `pcreate -s
+  augeias`. (#6)
+
 0.1.0 (20-10-2015)
 ------------------
 
