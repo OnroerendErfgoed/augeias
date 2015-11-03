@@ -35,7 +35,7 @@ def main(global_config, **settings):
 
     includeme(config)
 
-    if asbool(settings.get('augeias.init_collections', True)):  # pragma: no cover
+    if asbool(settings.get('augeias.init_collections', False)):  # pragma: no cover
         config.include('augeias.collections')
 
     return config.make_wsgi_app()
