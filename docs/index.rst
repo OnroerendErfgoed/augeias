@@ -19,6 +19,7 @@ need to know where the digit alobjects it's receiving are stored.
 .. toctree::
    :maxdepth: 2
 
+   install
    service
    api
    changes
