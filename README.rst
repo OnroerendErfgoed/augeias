@@ -9,6 +9,8 @@ Augeias
         :target: https://travis-ci.org/OnroerendErfgoed/augeias
 .. image:: https://coveralls.io/repos/OnroerendErfgoed/augeias/badge.svg?branch=master&service=github
         :target: https://coveralls.io/r/OnroerendErfgoed/augeias?branch=master
+.. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/augeias/badges/quality-score.png?b=master
+        :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/augeias/?branch=master
 
 Augeias. Stores your shit.
 
