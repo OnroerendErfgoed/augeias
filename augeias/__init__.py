@@ -21,6 +21,9 @@ def includeme(config):
                      pattern='/collections/{collection_key}/containers/{container_key}', request_method="GET")
     config.add_route('update_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="PUT")
+    config.add_route('copy_object',
+                     pattern='/collections/{collection_key}/containers/{container_key}/{object_key}/copy',
+                     request_method="PUT")
     config.add_route('delete_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="DELETE")
     config.add_route('get_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
