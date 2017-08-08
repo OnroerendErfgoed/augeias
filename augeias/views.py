@@ -3,6 +3,7 @@ import uuid
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFound
 from pyramid.view import view_config
+import urllib
 
 from augeias.stores.error import NotFoundException
 import re
@@ -68,9 +69,9 @@ class AugeiasView(object):
     def copy_object(self):
         '''copy an object in the data store'''
         json_data = self._get_json_from_request()
-        if 'storage_url' not in json_data:
-            raise ValidationFailure('Storage_url is required.')
-        keys = self._parse_keys_from_path(json_data['uri'])
+        if 'url' not in json_data:
+            raise ValidationFailure('Url is required.')
+        keys = self._parse_keys_from_url(json_data['url'])
         collection = self._retrieve_collection_from_name(keys['collection_key'])
         object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
         return self._update_object_from_data(object_data)
@@ -181,22 +182,25 @@ class AugeiasView(object):
         try:
             return self.request.json_body
         except AttributeError as e:
-            raise HTTPBadRequest(detail="Request has no json body. \n%s" % e)
+            raise HTTPBadRequest(detail="Request has no json body. \n%s" % e)  # pragma: no cover
         except ValueError as e:
             raise HTTPBadRequest(detail="Request has incorrect json body. \n%s" % e)
 
-    def _parse_keys_from_path(self, path):
+    def _parse_keys_from_url(self, path):
         pattern_get_object = self.request.route_url('get_object',
                                                     collection_key='(?P<collection_key>\w+)',
                                                     container_key='(?P<container_key>\w+)',
                                                     object_key='(?P<object_key>\w+)'
                                                     )
-        pattern_re = re.compile(pattern_get_object)
+        pattern_re = re.compile(urllib.unquote_plus(pattern_get_object))
         match = pattern_re.match(path)
         if match:
             return match.groupdict()
         else:
-            raise ValidationFailure('Uri does not match following pattern: {}.'.format(pattern_get_object))
+            raise ValidationFailure('Url does not match following pattern: {}.'.format(
+                urllib.unquote_plus(
+                    self.request.route_url('get_object', collection_key='{collection_key}',
+                                           container_key='{container_key}', object_key='{object_key}'))))
 
     def _retrieve_collection_from_name(self, collection_name):
         if collection_name in self.request.registry.collections:
