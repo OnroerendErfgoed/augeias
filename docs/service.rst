@@ -340,7 +340,7 @@ container are 1 or more objects.
         Accept: application/json
 
         {
-          "path": "http://augeias.onroerenderfgoed.be/collections/temp/containers/container_id/circletemp"
+          "url": "http://augeias.onroerenderfgoed.be/collections/temp/containers/container_id/circletemp"
         }
 
     **Exmaple response**:
