@@ -323,6 +323,56 @@ container are 1 or more objects.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` does not exist.
 
+.. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}/copy-object
+
+    Copy an object from one store location into another.
+
+    If an object with this key already exists, it will be overwritten. If not,
+    it will be created.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle/copy-object HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Accept: application/json
+
+        {
+          "path": "http://augeias.onroerenderfgoed.be/collections/temp/containers/container_id/circletemp"
+        }
+
+    **Exmaple response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
+            'object_key': 'circle',
+            'container_key': 'a311efb7-f125-4d0a-aa26-69d3657a2d06',
+            'collection_key': 'mine'
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be created or updated.
+
+    :reqheader Accept: The response content type depends on this header.
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns
+        :mimetype:`application/json`
+
+    :statuscode 200: The object was copied.
+    :statuscode 201: There was no object present with this key, it was created.
+    :statuscode 400: Validation failure. The input url of the object in the json body is not correct.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
 
 .. http:delete:: /collections/{collection_key}/containers/{container_key}/{object_key}
 

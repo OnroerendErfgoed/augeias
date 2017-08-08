@@ -12,7 +12,7 @@ Augeias
 .. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/augeias/badges/quality-score.png?b=master
         :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/augeias/?branch=master
 
-Augeias. Stores your shit.
+Augeias. Stores your files.
 
 Augeias is a small, RESTful, webapplication that allows you to store digital
 objects in an object store. While it allows you to communicate with you objects
