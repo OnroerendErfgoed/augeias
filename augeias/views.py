@@ -5,6 +5,7 @@ from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFo
 from pyramid.view import view_config
 
 from augeias.stores.error import NotFoundException
+import re
 
 
 @view_config(context=NotFoundException, renderer='json')
@@ -24,16 +25,7 @@ def failed_validation(exc, request):
     return {'message': 'Failed validation: %s' % exc.msg}
 
 
-
 class AugeiasView(object):
-
-    @staticmethod
-    def _is_long(s):
-        try:
-            long(s)
-            return True
-        except ValueError:
-            return False
 
     def __init__(self, request):
         self.request = request
@@ -42,30 +34,18 @@ class AugeiasView(object):
     def my_view(self):
         return {'project': 'augeias'}
 
-    def _get_object_data(self):
-        if 'Content-Length' not in self.request.headers or not self._is_long(self.request.headers['Content-Length']):
-            raise HTTPLengthRequired
-        content_length = long(self.request.headers['Content-Length'])
-        object_data = self.request.body_file
-        if content_length == 0:
-            raise HTTPBadRequest('body is empty')
-        return object_data
-
     @view_config(route_name='list_collections', permission='view')
     def list_collections(self):
         res = Response(content_type='application/json', status=200)
         res.json_body = [c for c in self.request.registry.collections]
         return res
 
-    @view_config(route_name='update_object', permission='edit')
-    def update_object(self):
-        '''update an object in the data store'''
-        collection = self.retrieve_collection()
+    def _update_object_from_data(self, object_data):
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
         if len(object_key) < 3:
             raise ValidationFailure('The object key must be 3 characters long')
-        object_data = self._get_object_data()
         collection.object_store.update_object(container_key, object_key, object_data)
         res = Response(content_type='application/json', status=200)
         res.json_body = {
@@ -78,10 +58,33 @@ class AugeiasView(object):
         }
         return res
 
+    @view_config(route_name='update_object', permission='edit')
+    def update_object(self):
+        '''update an object in the data store'''
+        object_data = self._get_object_data()
+        return self._update_object_from_data(object_data)
+
+    @view_config(route_name='update_object', permission='edit', accept='application/json')
+    def copy_object(self):
+        '''copy an object in the data store'''
+        json_data = self._get_json_from_request()
+        if 'uri' not in json_data:
+            raise ValidationFailure('Uri is required.')
+        route_pattern = self.request.matched_route.pattern
+        pattern = route_pattern.format(
+            collection_key='(?P<collection_key>\w+)',
+            container_key='(?P<container_key>\w+)',
+            object_key='(?P<object_key>\w+)'
+        )
+        keys = self._parse_keys_from_path(pattern, json_data['uri'])
+        collection = self._retrieve_collection_from_name(keys['collection_key'])
+        object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
+        return self._update_object_from_data(object_data)
+
     @view_config(route_name='delete_object', permission='edit')
     def delete_object(self):
         '''delete an object from the data store'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
         collection.object_store.delete_object(container_key, object_key)
@@ -99,7 +102,7 @@ class AugeiasView(object):
     @view_config(route_name='get_object', permission='view')
     def get_object(self):
         '''retrieve an object from the data store'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
         object_data = collection.object_store.get_object(container_key, object_key)
@@ -110,7 +113,7 @@ class AugeiasView(object):
     @view_config(route_name='list_object_keys_for_container', permission='view')
     def list_object_keys_for_container(self):
         '''list all object keys for a container in the data store'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         res = Response(content_type='application/json', status=200)
         res.json_body = collection.object_store.list_object_keys_for_container(container_key)
@@ -119,7 +122,7 @@ class AugeiasView(object):
     @view_config(route_name='create_container', permission='edit')
     def create_container(self):
         '''create a new container in the data store'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         collection.object_store.create_container(container_key)
         res = Response(content_type='application/json', status=200)
@@ -134,7 +137,7 @@ class AugeiasView(object):
     @view_config(route_name='create_container_and_id', permission='edit')
     def create_container_and_id(self):
         '''create a new container in the data store and generate an id'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = str(uuid.uuid4())
         collection.object_store.create_container(container_key)
         res = Response(content_type='application/json', status=201)
@@ -149,7 +152,7 @@ class AugeiasView(object):
     @view_config(route_name='delete_container', permission='edit')
     def delete_container(self):
         '''delete a container in the data store'''
-        collection = self.retrieve_collection()
+        collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         collection.object_store.delete_container(container_key)
         res = Response(content_type='application/json', status=200)
@@ -161,10 +164,49 @@ class AugeiasView(object):
         }
         return res
 
-    def retrieve_collection(self):
-        collection_name = self.request.matchdict['collection_key']
+    # HELPERS
+
+    @staticmethod
+    def _is_long(s):
+        try:
+            long(s)
+            return True
+        except ValueError:
+            return False
+
+    def _get_object_data(self):
+        if 'Content-Length' not in self.request.headers or not self._is_long(self.request.headers['Content-Length']):
+            raise HTTPLengthRequired
+        content_length = long(self.request.headers['Content-Length'])
+        object_data = self.request.body_file
+        if content_length == 0:
+            raise HTTPBadRequest('body is empty')
+        return object_data
+
+    def _get_json_from_request(self):
+        try:
+            return self.request.json_body
+        except AttributeError as e:
+            raise HTTPBadRequest(detail="Request has no json body. \n%s" % e)
+        except ValueError as e:
+            raise HTTPBadRequest(detail="Request has incorrect json body. \n%s" % e)
+
+    @staticmethod
+    def _parse_keys_from_path(pattern, path):
+        pattern_re = re.compile(pattern)
+        match = pattern_re.match(path)
+        if match:
+            return match.groupdict()
+        else:
+            raise ValidationFailure('Uri does not match following pattern: {}.'.format(pattern))
+
+    def _retrieve_collection_from_name(self, collection_name):
         if collection_name in self.request.registry.collections:
             collection = self.request.registry.collections[collection_name]
         else:
             raise HTTPNotFound('collection not found')
         return collection
+
+    def _retrieve_collection(self):
+        collection_name = self.request.matchdict['collection_key']
+        return self._retrieve_collection_from_name(collection_name)
