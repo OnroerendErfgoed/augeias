@@ -21,15 +21,13 @@ def includeme(config):
                      pattern='/collections/{collection_key}/containers/{container_key}', request_method="GET")
     config.add_route('update_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="PUT")
-    config.add_route('copy_object',
-                     pattern='/collections/{collection_key}/containers/{container_key}/{object_key}/copy-object',
-                     request_method="PUT")
     config.add_route('delete_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="DELETE")
     config.add_route('get_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="GET")
 
     config.scan()
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.

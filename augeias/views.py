@@ -41,7 +41,13 @@ class AugeiasView(object):
         res.json_body = [c for c in self.request.registry.collections]
         return res
 
-    def _update_object_from_data(self, object_data):
+    @view_config(route_name='update_object', permission='edit')
+    def update_object(self):
+        '''update an object in the data store'''
+        if self.request.content_type == 'application/json':
+            object_data = self._get_object_data_from_json_body()
+        else:
+            object_data = self._get_object_data()
         collection = self._retrieve_collection()
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
@@ -58,23 +64,6 @@ class AugeiasView(object):
                 object=object_key)
         }
         return res
-
-    @view_config(route_name='update_object', permission='edit')
-    def update_object(self):
-        '''update an object in the data store'''
-        object_data = self._get_object_data()
-        return self._update_object_from_data(object_data)
-
-    @view_config(route_name='copy_object', permission='edit', accept='application/json')
-    def copy_object(self):
-        '''copy an object in the data store'''
-        json_data = self._get_json_from_request()
-        if 'url' not in json_data:
-            raise ValidationFailure('Url is required.')
-        keys = self._parse_keys_from_url(json_data['url'])
-        collection = self._retrieve_collection_from_name(keys['collection_key'])
-        object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
-        return self._update_object_from_data(object_data)
 
     @view_config(route_name='delete_object', permission='edit')
     def delete_object(self):
@@ -176,6 +165,15 @@ class AugeiasView(object):
         object_data = self.request.body_file
         if content_length == 0:
             raise HTTPBadRequest('body is empty')
+        return object_data
+
+    def _get_object_data_from_json_body(self):
+        json_data = self._get_json_from_request()
+        if 'url' not in json_data:
+            raise ValidationFailure('Url is required.')
+        keys = self._parse_keys_from_url(json_data['url'])
+        collection = self._retrieve_collection_from_name(keys['collection_key'])
+        object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
         return object_data
 
     def _get_json_from_request(self):

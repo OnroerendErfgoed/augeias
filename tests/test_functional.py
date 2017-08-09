@@ -176,7 +176,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual('200 OK', cres2.status)
         json_data = json.dumps(
             {'url': 'http://localhost/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300'})
-        ores2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel/copy-object',
+        ores2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                  json_data, headers={'content-type': 'application/json'})
 
         self.assertEqual('200 OK', ores2.status)
@@ -186,16 +186,16 @@ class FunctionalTests(unittest.TestCase):
 
     def test_copy_object_invalid_body(self):
         json_data = 'test'
-        res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel/copy-object',
+        res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res.status, '400 Bad Request')
         json_data = '{"path": "test"}'
-        res3 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel/copy-object',
-                                json_data, expect_errors=True)
+        res3 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res3.status, '400 Bad Request')
         json_data = '{"url": "test"}'
-        res4 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel/copy-object',
-                                json_data, expect_errors=True)
+        res4 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res4.status, '400 Bad Request')
 
     def test_delete_object(self):
