@@ -292,6 +292,7 @@ container are 1 or more objects.
 
         PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
         Host: augeias.onroerenderfgoed.be
+        Content-Type: application/octet-stream
         Accept: application/json
 
     **Exmaple response**:
@@ -323,7 +324,7 @@ container are 1 or more objects.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` does not exist.
 
-.. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}/copy-object
+.. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
     Copy an object from one store location into another.
 
@@ -337,6 +338,7 @@ container are 1 or more objects.
 
         PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle/copy-object HTTP/1.1
         Host: augeias.onroerenderfgoed.be
+        Content-Type: application/json
         Accept: application/json
 
         {
