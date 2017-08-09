@@ -19,6 +19,8 @@ def includeme(config):
                      request_method="DELETE")
     config.add_route('list_object_keys_for_container',
                      pattern='/collections/{collection_key}/containers/{container_key}', request_method="GET")
+    config.add_route('create_object_and_id', pattern='/collections/{collection_key}/containers/{container_key}',
+                     request_method="POST")
     config.add_route('update_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="PUT")
     config.add_route('delete_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',

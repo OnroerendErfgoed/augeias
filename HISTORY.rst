@@ -1,8 +1,9 @@
-0.3.0 (08-08-2017)
+0.3.0 (??-08-2017)
 ------------------
 
 - Add 'copy' functionality to update_object endpoint. In this case the view accepts the (augeias) location
-of the file object and copies it to a new location.
+of the file object and copies it to a new location. (#17)
+- Add Endpoint to create object and key. (#20)
 
 0.2.0 (07-11-2015)
 ------------------
