@@ -243,3 +243,18 @@ class FunctionalTests(unittest.TestCase):
             container_key = str(container_key)
         self.assertTrue(uuid4hex.match(container_key))
         print(res.json_body['uri'])
+
+    def test_create_object_with_id(self):
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+        testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        res = self.testapp.post('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID', bdata)
+        self.assertEqual('201 Created', res.status)
+        uuid4hex = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\Z', re.I)
+        object_key = res.json_body['object_key']
+        if isinstance(object_key, unicode):
+            object_key = str(object_key)
+        self.assertTrue(uuid4hex.match(object_key))
+        print(res.json_body['uri'])
