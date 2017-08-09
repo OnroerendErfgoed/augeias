@@ -336,7 +336,7 @@ container are 1 or more objects.
 
     .. sourcecode:: http
 
-        PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle/copy-object HTTP/1.1
+        PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
         Host: augeias.onroerenderfgoed.be
         Content-Type: application/json
         Accept: application/json
