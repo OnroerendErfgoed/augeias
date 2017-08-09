@@ -8,6 +8,7 @@ from augeias import main
 import ast
 from augeias.collections import Collection
 from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
+import json
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, 'conf_test.ini'))
@@ -159,6 +160,43 @@ class FunctionalTests(unittest.TestCase):
                                expect_errors=True, status=400)
         self.assertDictEqual({u'message': u'Failed validation: The object key must be 3 characters long'},
                              res.json_body)
+
+    def test_copy_object(self):
+        # create container and add object
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+        testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
+        self.assertEqual('200 OK', ores.status)
+        self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
+                      ores.body)
+        cres2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2')
+        self.assertEqual('200 OK', cres2.status)
+        json_data = json.dumps(
+            {'url': 'http://localhost/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300'})
+        ores2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                 json_data, headers={'content-type': 'application/json'})
+
+        self.assertEqual('200 OK', ores2.status)
+        res2 = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel')
+        self.assertEqual('200 OK', res2.status)
+        self.assertEqual(bdata, res2.body)
+
+    def test_copy_object_invalid_body(self):
+        json_data = 'test'
+        res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                               json_data, headers={'content-type': 'application/json'}, expect_errors=True)
+        self.assertEqual(res.status, '400 Bad Request')
+        json_data = '{"path": "test"}'
+        res3 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
+        self.assertEqual(res3.status, '400 Bad Request')
+        json_data = '{"url": "test"}'
+        res4 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
+        self.assertEqual(res4.status, '400 Bad Request')
 
     def test_delete_object(self):
         # create container and add object
