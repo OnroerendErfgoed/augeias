@@ -278,6 +278,52 @@ container are 1 or more objects.
         `container_key` or the `object_key` does not exist.
 
 
+.. http:post:: /collections/{collection_key}/containers/{container_key}
+
+    Create a new object. The server will generate a random object key.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        POST /collections/mine/containers/mine_container HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Content-Type: application/octet-stream
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+        Location: https://storage.onroerenderfgoed.be/collections/mine/containers/mine_container/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
+
+        {
+            'container_key': 'mine_container',
+            'object_key': '6ed5a007-41cf-49ed-8cb8-184fa5f48e42',
+            'collection_key': 'mine'
+            'uri': 'https://storage.onroerenderfgoed.be/collections/mine/containers/mine_container/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be created or updated.
+
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
+    :reqheader Accept: The response content type depends on this header.
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns
+        :mimetype:`application/json`
+
+    :statuscode 201: The object and the key were created.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
+
 .. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
     Add or update an object in a container.
@@ -313,10 +359,12 @@ container are 1 or more objects.
     :param container_key: Key for the container where the object lives.
     :param object_key: Key for the object that will be created or updated.
 
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
     :reqheader Accept: The response content type depends on this header. 
         Currently only :mimetype:`application/json` is supported.
 
-    :resheader Content-Type: This service currently always returns 
+    :resheader Content-Type: This service currently always returns
         :mimetype:`application/json`
 
     :statuscode 200: The object was updated.
@@ -363,6 +411,8 @@ container are 1 or more objects.
     :param container_key: Key for the container where the object lives.
     :param object_key: Key for the object that will be created or updated.
 
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
     :reqheader Accept: The response content type depends on this header.
         Currently only :mimetype:`application/json` is supported.
 
