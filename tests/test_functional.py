@@ -198,6 +198,21 @@ class FunctionalTests(unittest.TestCase):
                                 json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res4.status, '400 Bad Request')
 
+    def test_copy_object_invalid_body_not_found(self):
+        json_data = '{"url": "http://localhost/collections/TEST_COLLECTION_INVALID/containers/TEST_CONTAINER_ID/200"}'
+        res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                               json_data, headers={'content-type': 'application/json'}, expect_errors=True)
+        self.assertEqual(res.status, '400 Bad Request')
+        self.assertIn('Collection TEST_COLLECTION_INVALID was not found', res.text)
+        json_data = '{"url": "http://localhost/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200"}'
+        res2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
+                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
+        self.assertEqual(res2.status, '400 Bad Request')
+        self.assertIn(
+            'Container - object (TEST_CONTAINER_ID - 200) combination was not found in Collection TEST_COLLECTION',
+            res2.text
+        )
+
     def test_delete_object(self):
         # create container and add object
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')

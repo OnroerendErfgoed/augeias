@@ -198,8 +198,14 @@ def _get_object_data_from_json_body(request):
     if 'url' not in json_data:
         raise ValidationFailure('Url is required.')
     keys = _parse_keys_from_url(request, json_data['url'])
-    collection = _retrieve_collection_from_name(request, keys['collection_key'])
-    object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
+    collection = request.registry.collections.get(keys['collection_key'])
+    if not collection:
+        raise HTTPBadRequest('Collection {} was not found'.format(keys['collection_key']))
+    try:
+        object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
+    except NotFoundException:
+        raise HTTPBadRequest('Container - object ({0} - {1}) combination was not found in Collection {2}'.format(
+            keys['container_key'], keys['object_key'], keys['collection_key']))
     return object_data
 
 
@@ -230,14 +236,10 @@ def _parse_keys_from_url(request, url):
                                                   object_key='{object_key}'))))
 
 
-def _retrieve_collection_from_name(request, collection_name):
+def _retrieve_collection(request):
+    collection_name = request.matchdict['collection_key']
     if collection_name in request.registry.collections:
         collection = request.registry.collections[collection_name]
     else:
         raise HTTPNotFound('collection not found')
     return collection
-
-
-def _retrieve_collection(request):
-    collection_name = request.matchdict['collection_key']
-    return _retrieve_collection_from_name(request, collection_name)
