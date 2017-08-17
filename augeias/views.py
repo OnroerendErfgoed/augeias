@@ -43,7 +43,12 @@ class AugeiasView(object):
 
     @view_config(route_name='update_object', permission='edit')
     def update_object(self):
-        '''update an object in the data store'''
+        '''
+        Update an object in the data store.
+        The input object data may be:
+        - an object stream (Content-Type: application/octet-stream),
+        - or a store location (absolute URL) within the same Augeias instance (Content-Type: application/json). 
+        '''
         object_data = _get_object_data(self.request)
         collection = _retrieve_collection(self.request)
         container_key = self.request.matchdict['container_key']
@@ -194,6 +199,7 @@ def _get_object_data_from_stream(request):
 
 
 def _get_object_data_from_json_body(request):
+    '''The json body contains the location of the input object. This must be an absolute URL.'''
     json_data = _get_json_from_request(request)
     if 'url' not in json_data:
         raise ValidationFailure('Url is required.')

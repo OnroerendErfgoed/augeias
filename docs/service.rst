@@ -374,7 +374,8 @@ container are 1 or more objects.
 
 .. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
-    Copy an object from one store location into another.
+    Copy an object from one store location into another within the same Augeias instance.
+    The location of the input object must be an absolute URL.
 
     If an object with this key already exists, it will be overwritten. If not,
     it will be created.
