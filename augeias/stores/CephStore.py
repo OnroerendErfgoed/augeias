@@ -9,6 +9,9 @@ class CephStore(IStore):
     def get_object(self, container_key, object_key):
         pass
 
+    def get_object_info(self, container_key, object_key):
+        pass
+
     def create_object(self, container_key, object_key, object_data):
         pass
 

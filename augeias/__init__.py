@@ -27,6 +27,9 @@ def includeme(config):
                      request_method="DELETE")
     config.add_route('get_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',
                      request_method="GET")
+    config.add_route('get_object_info',
+                     pattern='/collections/{collection_key}/containers/{container_key}/{object_key}/meta',
+                     request_method="GET")
 
     config.scan()
 

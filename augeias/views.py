@@ -111,8 +111,19 @@ class AugeiasView(object):
         container_key = self.request.matchdict['container_key']
         object_key = self.request.matchdict['object_key']
         object_data = collection.object_store.get_object(container_key, object_key)
-        res = Response(content_type='application/octet-stream', status=200)
+        content_type = collection.object_store.get_object_info(container_key, object_key)['mime']
+        res = Response(content_type=content_type, status=200)
         res.body = object_data
+        return res
+
+    @view_config(route_name='get_object_info', permission='view')
+    def get_object_info(self):
+        '''retrieve object info (mimetype, size, time last modification) from the data store'''
+        collection = _retrieve_collection(self.request)
+        container_key = self.request.matchdict['container_key']
+        object_key = self.request.matchdict['object_key']
+        res = Response(content_type='application/json', status=200)
+        res.json_body = collection.object_store.get_object_info(container_key, object_key)
         return res
 
     @view_config(route_name='list_object_keys_for_container', permission='view')

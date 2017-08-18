@@ -105,6 +105,26 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(file_size, len(res.body))
         self.assertEqual(bdata, res.body)
 
+    def test_get_object_info(self):
+        # create container and add object
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+        self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID',
+                      cres.body)
+        testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
+        self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
+                      ores.body)
+        self.assertEqual('200 OK', ores.status)
+
+        res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300/meta')
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual(11370, res.json_body['size'])
+        self.assertEqual('image/jpeg', res.json_body['mime'])
+        self.assertIn('time_last_modification', res.json_body)
+
     def test_list_object_keys_for_container(self):
         # create container and add objects
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')

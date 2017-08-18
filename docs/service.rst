@@ -277,6 +277,41 @@ container are 1 or more objects.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` or the `object_key` does not exist.
 
+.. http:get:: /collections/{collection_key}/containers/{container_key}/{object_key}/meta
+
+    Fetch object info (mimetype, size, time last modification).
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full/meta HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-type: image/jpeg
+
+        {
+                "time_last_modification": "2017-08-18T13:52:25.970242",
+                "mime": "image/jpeg",
+                "size": 11370
+        }
+
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be fetched
+
+    :statuscode 200: The object was found.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` or the `object_key` does not exist.
+
 
 .. http:post:: /collections/{collection_key}/containers/{container_key}
 
