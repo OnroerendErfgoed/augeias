@@ -49,6 +49,8 @@ class PairTreeFileSystemStore(IStore):
         :param str object_key: Key of the object to retrieve.
         :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
         '''
+        # todo magic.from_buffer(open(file_path).read(1048576), mime=True) cannot microsoft mimetypes
+        # https://stackoverflow.com/questions/17779560/django-python-magic-identify-ppt-docx-word-uploaded-file-as-application-zip
         file_path = '/'.join([self.store.store_dir, 'pairtree_root', id2path(container_key), object_key])
         if not os.path.exists(file_path):
             raise NotFoundException
