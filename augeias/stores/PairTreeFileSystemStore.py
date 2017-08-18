@@ -50,6 +50,8 @@ class PairTreeFileSystemStore(IStore):
         :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
         '''
         file_path = '/'.join([self.store.store_dir, 'pairtree_root', id2path(container_key), object_key])
+        if not os.path.exists(file_path):
+            raise NotFoundException
         file_stat = os.stat(file_path)
         return {
             'time_last_modification': datetime.datetime.fromtimestamp(file_stat.st_mtime).isoformat(),

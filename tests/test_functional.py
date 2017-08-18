@@ -125,6 +125,18 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual('image/jpeg', res.json_body['mime'])
         self.assertIn('time_last_modification', res.json_body)
 
+    def test_get_object_info_not_found(self):
+        # create container and add object
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+
+        res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/not_found/meta',
+                               expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        res2 = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_NOT_FOUND/not_found/meta',
+                                expect_errors=True)
+        self.assertEqual('404 Not Found', res2.status)
+
     def test_list_object_keys_for_container(self):
         # create container and add objects
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
