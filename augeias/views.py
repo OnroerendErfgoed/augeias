@@ -3,10 +3,8 @@ import uuid
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFound
 from pyramid.view import view_config
-import urllib
 
 from augeias.stores.error import NotFoundException
-import re
 
 
 @view_config(context=NotFoundException, renderer='json')
@@ -47,7 +45,8 @@ class AugeiasView(object):
         Update an object in the data store.
         The input object data may be:
         - an object stream (Content-Type: application/octet-stream),
-        - or a store location (absolute URL) within the same Augeias instance (Content-Type: application/json). 
+        - or a store location (host url, collection_key, container_key and object_key) 
+            within the same Augeias instance (Content-Type: application/json). 
         '''
         object_data = _get_object_data(self.request)
         collection = _retrieve_collection(self.request)
@@ -210,19 +209,25 @@ def _get_object_data_from_stream(request):
 
 
 def _get_object_data_from_json_body(request):
-    '''The json body contains the location of the input object. This must be an absolute URL.'''
+    '''
+    The json body contains the location of the input object. 
+    The body must include be the host url, collection_key, container_key and object_key.
+    '''
     json_data = _get_json_from_request(request)
-    if 'url' not in json_data:
-        raise ValidationFailure('Url is required.')
-    keys = _parse_keys_from_url(request, json_data['url'])
-    collection = request.registry.collections.get(keys['collection_key'])
+    required_keys = ['host_url', 'collection_key', 'container_key', 'object_key']
+    missing_keys = set(required_keys) - set(json_data.keys())
+    if missing_keys:
+        raise HTTPBadRequest('\n'.join('{} is Required.'.format(key) for key in missing_keys))
+    if request.host_url != json_data['host_url']:
+        raise ValidationFailure('Host must be equal to the current host url {}.'.format(request.host))
+    collection = request.registry.collections.get(json_data['collection_key'])
     if not collection:
-        raise HTTPBadRequest('Collection {} was not found'.format(keys['collection_key']))
+        raise HTTPBadRequest('Collection {} was not found'.format(json_data['collection_key']))
     try:
-        object_data = collection.object_store.get_object(keys['container_key'], keys['object_key'])
+        object_data = collection.object_store.get_object(json_data['container_key'], json_data['object_key'])
     except NotFoundException:
         raise HTTPBadRequest('Container - object ({0} - {1}) combination was not found in Collection {2}'.format(
-            keys['container_key'], keys['object_key'], keys['collection_key']))
+            json_data['container_key'], json_data['object_key'], json_data['collection_key']))
     return object_data
 
 
@@ -233,24 +238,6 @@ def _get_json_from_request(request):
         raise HTTPBadRequest(detail="Request has no json body. \n%s" % e)  # pragma: no cover
     except ValueError as e:
         raise HTTPBadRequest(detail="Request has incorrect json body. \n%s" % e)
-
-
-def _parse_keys_from_url(request, url):
-    pattern_get_object = request.route_url('get_object',
-                                           collection_key='(?P<collection_key>\w+)',
-                                           container_key='(?P<container_key>\w+)',
-                                           object_key='(?P<object_key>\w+)'
-                                           )
-    pattern_re = re.compile(urllib.unquote_plus(pattern_get_object))
-    match = pattern_re.match(url)
-    if match:
-        return match.groupdict()
-    else:
-        raise ValidationFailure('Url does not match following pattern: {}.'.format(
-            urllib.unquote_plus(request.route_url('get_object',
-                                                  collection_key='{collection_key}',
-                                                  container_key='{container_key}',
-                                                  object_key='{object_key}'))))
 
 
 def _retrieve_collection(request):

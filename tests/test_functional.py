@@ -206,8 +206,12 @@ class FunctionalTests(unittest.TestCase):
                       ores.body)
         cres2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2')
         self.assertEqual('200 OK', cres2.status)
-        json_data = json.dumps(
-            {'url': 'http://localhost/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300'})
+        json_data = json.dumps({
+            'host_url': 'http://localhost',
+            'collection_key': 'TEST_COLLECTION',
+            'container_key': 'TEST_CONTAINER_ID',
+            'object_key': '200x300'
+        })
         ores2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                  json_data, headers={'content-type': 'application/json'})
 
@@ -225,18 +229,33 @@ class FunctionalTests(unittest.TestCase):
         res3 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                 json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res3.status, '400 Bad Request')
-        json_data = '{"url": "test"}'
+        json_data = json.dumps({
+            'host_url': 'bad host url',
+            'collection_key': 'TEST_COLLECTION',
+            'container_key': 'TEST_CONTAINER_ID',
+            'object_key': '200x300'
+        })
         res4 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                 json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res4.status, '400 Bad Request')
 
     def test_copy_object_invalid_body_not_found(self):
-        json_data = '{"url": "http://localhost/collections/TEST_COLLECTION_INVALID/containers/TEST_CONTAINER_ID/200"}'
+        json_data = json.dumps({
+            'host_url': 'http://localhost',
+            'collection_key': 'TEST_COLLECTION_INVALID',
+            'container_key': 'TEST_CONTAINER_ID',
+            'object_key': '200x300'
+        })
         res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res.status, '400 Bad Request')
         self.assertIn('Collection TEST_COLLECTION_INVALID was not found', res.text)
-        json_data = '{"url": "http://localhost/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200"}'
+        json_data = json.dumps({
+            'host_url': 'http://localhost',
+            'collection_key': 'TEST_COLLECTION',
+            'container_key': 'TEST_CONTAINER_ID',
+            'object_key': '200'
+        })
         res2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2/kasteel',
                                 json_data, headers={'content-type': 'application/json'}, expect_errors=True)
         self.assertEqual(res2.status, '400 Bad Request')

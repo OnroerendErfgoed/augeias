@@ -410,7 +410,7 @@ container are 1 or more objects.
 .. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
     Copy an object from one store location into another within the same Augeias instance.
-    The location of the input object must be an absolute URL.
+    The input json data must contain host url, collection_key, container_key and object_key of the object that needs to be copied.
 
     If an object with this key already exists, it will be overwritten. If not,
     it will be created.
@@ -426,7 +426,10 @@ container are 1 or more objects.
         Accept: application/json
 
         {
-          "url": "http://augeias.onroerenderfgoed.be/collections/temp/containers/container_id/circletemp"
+          "host_url": "http://augeias.onroerenderfgoed.be",
+          "collection_key": "temp",
+          "container_key": "container_id",
+          "object_key": "circletemp"
         }
 
     **Exmaple response**:
@@ -437,10 +440,10 @@ container are 1 or more objects.
         Content-Type: application/json
 
         {
-            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
-            'object_key': 'circle',
-            'container_key': 'a311efb7-f125-4d0a-aa26-69d3657a2d06',
-            'collection_key': 'mine'
+            "uri": "https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle",
+            "object_key": "circle",
+            "container_key": "a311efb7-f125-4d0a-aa26-69d3657a2d06",
+            "collection_key": "mine"
         }
 
     :param collection_key: Key for the collection where the container lives.
@@ -482,7 +485,7 @@ container are 1 or more objects.
         Content-Type: application/json
 
         {
-            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
+            "uri": "https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle",
             "object_key":"full",
             "container_key":"a311efb7-f125-4d0a-aa26-69d3657a2d06",
             "collection_key": "mine"
