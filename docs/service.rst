@@ -460,7 +460,7 @@ container are 1 or more objects.
 
     :statuscode 200: The object was copied.
     :statuscode 201: There was no object present with this key, it was created.
-    :statuscode 400: Validation failure. The input url of the object in the json body is not correct.
+    :statuscode 400: Validation failure. The input data of the object in the json body is not correct.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` does not exist.
 
