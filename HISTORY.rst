@@ -1,3 +1,10 @@
+0.3.0 (22-08-2017)
+------------------
+
+- Add 'copy' functionality to update_object endpoint. In this case the view accepts the (augeias) location of the file object (host url, collection_key, container_key and object_key) and copies it to a new location on the same augeias instance. (#17)
+- Add Endpoint to create object and key. (#20)
+- Add Endpoint to retrieve meta data (mimetype (#13), size, time last modification) from object.
+
 0.2.0 (07-11-2015)
 ------------------
 

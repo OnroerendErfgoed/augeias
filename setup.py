@@ -11,12 +11,13 @@ with open(os.path.join(here, 'HISTORY.rst')) as f:
 requires = [
     'pyramid',
     'pairtree',
+    'python-magic',
     'pyramid_rewrite'
     ]
 
 setup(name='augeias',
-      version='0.2.0',
-      description='Augeias. Stores your shit.',
+      version='0.3.0',
+      description='Augeias. Stores your files.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

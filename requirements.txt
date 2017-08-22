@@ -4,6 +4,7 @@ pyramid_rewrite==0.2
 
 # pairtree
 pairtree>=0.5.8
+python-magic==0.4.13
 
 venusian==1.0
 webob==1.4

@@ -277,6 +277,87 @@ container are 1 or more objects.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` or the `object_key` does not exist.
 
+.. http:get:: /collections/{collection_key}/containers/{container_key}/{object_key}/meta
+
+    Fetch object info (mimetype, size, time last modification).
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/full/meta HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-type: image/jpeg
+
+        {
+                "time_last_modification": "2017-08-18T13:52:25.970242",
+                "mime": "image/jpeg",
+                "size": 11370
+        }
+
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be fetched
+
+    :statuscode 200: The object was found.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` or the `object_key` does not exist.
+
+
+.. http:post:: /collections/{collection_key}/containers/{container_key}
+
+    Create a new object. The server will generate a random object key.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        POST /collections/mine/containers/mine_container HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Content-Type: application/octet-stream
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 201 Created
+        Content-Type: application/json
+        Location: https://storage.onroerenderfgoed.be/collections/mine/containers/mine_container/6ed5a007-41cf-49ed-8cb8-184fa5f48e42
+
+        {
+            'container_key': 'mine_container',
+            'object_key': '6ed5a007-41cf-49ed-8cb8-184fa5f48e42',
+            'collection_key': 'mine'
+            'uri': 'https://storage.onroerenderfgoed.be/collections/mine/containers/mine_container/6ed5a007-41cf-49ed-8cb8-184fa5f48e42'
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be created or updated.
+
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
+    :reqheader Accept: The response content type depends on this header.
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns
+        :mimetype:`application/json`
+
+    :statuscode 201: The object and the key were created.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
 
 .. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
 
@@ -292,6 +373,7 @@ container are 1 or more objects.
 
         PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
         Host: augeias.onroerenderfgoed.be
+        Content-Type: application/octet-stream
         Accept: application/json
 
     **Exmaple response**:
@@ -312,14 +394,73 @@ container are 1 or more objects.
     :param container_key: Key for the container where the object lives.
     :param object_key: Key for the object that will be created or updated.
 
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
     :reqheader Accept: The response content type depends on this header. 
         Currently only :mimetype:`application/json` is supported.
 
-    :resheader Content-Type: This service currently always returns 
+    :resheader Content-Type: This service currently always returns
         :mimetype:`application/json`
 
     :statuscode 200: The object was updated.
     :statuscode 201: There was no object present with this key, it was created.
+    :statuscode 404: The collection `collection_key` or the container
+        `container_key` does not exist.
+
+.. http:put:: /collections/{collection_key}/containers/{container_key}/{object_key}
+
+    Copy an object from one store location into another within the same Augeias instance.
+    The input json data must contain host url, collection_key, container_key and object_key of the object that needs to be copied.
+
+    If an object with this key already exists, it will be overwritten. If not,
+    it will be created.
+
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        PUT /collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle HTTP/1.1
+        Host: augeias.onroerenderfgoed.be
+        Content-Type: application/json
+        Accept: application/json
+
+        {
+          "host_url": "http://augeias.onroerenderfgoed.be",
+          "collection_key": "temp",
+          "container_key": "container_id",
+          "object_key": "circletemp"
+        }
+
+    **Exmaple response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "uri": "https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle",
+            "object_key": "circle",
+            "container_key": "a311efb7-f125-4d0a-aa26-69d3657a2d06",
+            "collection_key": "mine"
+        }
+
+    :param collection_key: Key for the collection where the container lives.
+    :param container_key: Key for the container where the object lives.
+    :param object_key: Key for the object that will be created or updated.
+
+    :reqheader Content-Type:
+        :mimetype:`application/json` or :mimetype:`application/octet-stream`
+    :reqheader Accept: The response content type depends on this header.
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns
+        :mimetype:`application/json`
+
+    :statuscode 200: The object was copied.
+    :statuscode 201: There was no object present with this key, it was created.
+    :statuscode 400: Validation failure. The input data of the object in the json body is not correct.
     :statuscode 404: The collection `collection_key` or the container
         `container_key` does not exist.
 
@@ -344,7 +485,7 @@ container are 1 or more objects.
         Content-Type: application/json
 
         {
-            'uri': 'https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle',
+            "uri": "https://id.erfgoed.net/storage/collections/mine/containers/a311efb7-f125-4d0a-aa26-69d3657a2d06/circle",
             "object_key":"full",
             "container_key":"a311efb7-f125-4d0a-aa26-69d3657a2d06",
             "collection_key": "mine"

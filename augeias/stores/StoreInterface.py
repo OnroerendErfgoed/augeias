@@ -45,6 +45,16 @@ class IStore:
         '''
 
     @abstractmethod
+    def get_object_info(self, container_key, object_key):
+        '''
+        Retrieve object info (mimetype, size, time last modification) from the data store.
+
+        :param str container_key: Key of the container that the object lives in.
+        :param str object_key: Key of the object to retrieve.
+        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        '''
+
+    @abstractmethod
     def update_object(self, container_key, object_key, object_data):
         '''
         Update an object in the data store.
