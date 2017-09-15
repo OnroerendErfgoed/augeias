@@ -2,7 +2,7 @@
 --requirement requirements.txt
 
 # pyramid
-pyramid-debugtoolbar==2.0.2
+pyramid-debugtoolbar==4.3
 
 # Testing
 pytest==2.7.3
