@@ -23,6 +23,6 @@ waitress==1.0.2
 
 # Linting
 flake8==3.4.1
-mccabe==0.2.1
+mccabe==0.6.1
 pep8==1.4.6
 pyflakes==0.7.3
