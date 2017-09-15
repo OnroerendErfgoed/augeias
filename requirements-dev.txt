@@ -22,7 +22,7 @@ sphinx_rtd_theme==0.2.4
 waitress==1.0.2
 
 # Linting
-flake8==2.1.0
+flake8==3.4.1
 mccabe==0.2.1
 pep8==1.4.6
 pyflakes==0.7.3
