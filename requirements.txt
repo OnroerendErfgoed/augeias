@@ -3,7 +3,7 @@ pyramid==1.5
 pyramid_rewrite==0.2
 
 # pairtree
-pairtree>=0.5.8
+pairtree==0.7.1-T
 python-magic==0.4.13
 
 venusian==1.0
