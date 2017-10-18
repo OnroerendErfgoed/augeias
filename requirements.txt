@@ -3,7 +3,8 @@ pyramid==1.5
 pyramid_rewrite==0.2
 
 # pairtree
-pairtree==0.7.1-T
+git+https://github.com/benosteen/pairtree.git@56a5ffdf258c30a3ce210868a2ea1258d779509e#egg=pairtree
+#pairtree==0.7.1-T
 python-magic==0.4.13
 
 venusian==1.0
