@@ -71,7 +71,7 @@ class PairTreeFileSystemStore(IStore):
         :param str object_data: The data for the object to create.
         :raises augeias.stores.error.NotFoundException: When the container could not be found.
         '''
-        _cast_data(object_data)
+        _validate_data(object_data)
         container = self._get_container(container_key)
         container.add_bytestream(object_key, object_data)
 
@@ -84,7 +84,7 @@ class PairTreeFileSystemStore(IStore):
         :param str object_data: New data for the object.
         :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
         '''
-        _cast_data(object_data)
+        _validate_data(object_data)
         container = self.store.get_object(container_key, False)
         container.add_bytestream(object_key, object_data)
 
@@ -147,6 +147,6 @@ def _is_allowed_data(data):
     return True
 
 
-def _cast_data(data):
+def _validate_data(data):
     if not _is_allowed_data(data):
         raise IOError('Data type is not allowed')
