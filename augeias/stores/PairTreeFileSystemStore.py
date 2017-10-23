@@ -9,6 +9,7 @@ from augeias.stores.error import NotFoundException
 import os
 import magic
 import datetime
+import sys
 
 
 class PairTreeFileSystemStore(IStore):
@@ -58,7 +59,7 @@ class PairTreeFileSystemStore(IStore):
         return {
             'time_last_modification': datetime.datetime.fromtimestamp(file_stat.st_mtime).isoformat(),
             'size': file_stat.st_size,
-            'mime': magic.from_buffer(open(file_path).read(1048576), mime=True) or 'application/octet-stream'
+            'mime': magic.from_buffer(open(file_path, 'rb').read(1048576), mime=True) or 'application/octet-stream'
         }
 
     def create_object(self, container_key, object_key, object_data):
@@ -70,6 +71,7 @@ class PairTreeFileSystemStore(IStore):
         :param str object_data: The data for the object to create.
         :raises augeias.stores.error.NotFoundException: When the container could not be found.
         '''
+        _validate_data(object_data)
         container = self._get_container(container_key)
         container.add_bytestream(object_key, object_data)
 
@@ -82,6 +84,7 @@ class PairTreeFileSystemStore(IStore):
         :param str object_data: New data for the object.
         :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
         '''
+        _validate_data(object_data)
         container = self.store.get_object(container_key, False)
         container.add_bytestream(object_key, object_data)
 
@@ -130,3 +133,20 @@ class PairTreeFileSystemStore(IStore):
             self.store.delete_object(container_key)
         except ObjectNotFoundException:
             raise NotFoundException
+
+
+def _is_allowed_data(data):  # pragma: no cover
+    # not exhaustive.
+    python_version = sys.version_info.major
+    if python_version < 3 and isinstance(data, unicode):
+        return False
+
+    if python_version >= 3 and isinstance(data, str):
+        return False
+
+    return True
+
+
+def _validate_data(data):
+    if not _is_allowed_data(data):
+        raise IOError('Data type is not allowed')

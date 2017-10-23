@@ -2,7 +2,7 @@ import os
 import unittest
 import tempdir
 from augeias.stores.CephStore import CephStore
-from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
+from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore, _is_allowed_data, _validate_data
 from augeias.stores.error import NotFoundException
 
 
@@ -22,12 +22,12 @@ class TestPairTreeStore(unittest.TestCase):
         container_key = 'testing'
         object_key = 'metadata'
         self.store.create_container(container_key)
-        self.store.create_object(container_key, object_key, 'some test data')
+        self.store.create_object(container_key, object_key, b'some test data')
         object_list = self.store.list_object_keys_for_container(container_key)
         self.assertEqual(1, len(object_list))
         self.assertEqual(object_key, object_list[0])
         object_value = self.store.get_object(container_key, object_key)
-        self.assertEqual('some test data', object_value)
+        self.assertEqual(b'some test data', object_value)
         self.store.delete_object(container_key, object_key)
         object_list = self.store.list_object_keys_for_container(container_key)
         self.assertEqual(0, len(object_list))
@@ -70,25 +70,25 @@ class TestPairTreeStore(unittest.TestCase):
         container_key = 'testing'
         object_key = 'metadata'
         self.store.create_container(container_key)
-        self.store.create_object(container_key, object_key, 'some test data')
+        self.store.create_object(container_key, object_key, b'some test data')
         object_value = self.store.get_object(container_key, object_key)
-        self.assertEqual('some test data', object_value)
-        self.store.update_object(container_key, object_key, 'updated data')
+        self.assertEqual(b'some test data', object_value)
+        self.store.update_object(container_key, object_key, b'updated data')
         object_value = self.store.get_object(container_key, object_key)
-        self.assertEqual('updated data', object_value)
+        self.assertEqual(b'updated data', object_value)
 
     def test_delete_nonexisting(self):
         container_key = 'testing'
         object_key = 'metadata'
         self.store.create_container(container_key)
-        self.store.create_object(container_key, object_key, 'some test data')
+        self.store.create_object(container_key, object_key, b'some test data')
         self.assertRaises(NotFoundException, self.store.delete_object, container_key, 'nogo')
 
     def test_add_object_to_nonexisting_container(self):
         error_raised = False
         self.store.create_container('x')
         try:
-            self.store.create_object('xx', '253', 'some test data')
+            self.store.create_object('xx', '253', b'some test data')
         except NotFoundException:
             error_raised = True
         self.assertTrue(error_raised)
@@ -104,6 +104,13 @@ class TestPairTreeStore(unittest.TestCase):
         except NotFoundException:
             error_raised = True
         self.assertTrue(error_raised)
+
+    def test_is_allowed_data(self):
+        self.assertFalse(_is_allowed_data(u'foo'))
+        self.assertTrue(_is_allowed_data(b'data'))
+
+    def test_validate_data(self):
+        self.assertRaises(IOError, _validate_data, u'foo')
 
 
 class TestCephStore(unittest.TestCase):
