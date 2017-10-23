@@ -2,7 +2,7 @@ import os
 import unittest
 import tempdir
 from augeias.stores.CephStore import CephStore
-from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
+from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore, _is_allowed_data, _validate_data
 from augeias.stores.error import NotFoundException
 
 
@@ -104,6 +104,13 @@ class TestPairTreeStore(unittest.TestCase):
         except NotFoundException:
             error_raised = True
         self.assertTrue(error_raised)
+
+    def test_is_allowed_data(self):
+        self.assertFalse(_is_allowed_data(u'foo'))
+        self.assertTrue(_is_allowed_data(b'data'))
+
+    def test_validate_data(self):
+        self.assertRaises(IOError, _validate_data, u'foo')
 
 
 class TestCephStore(unittest.TestCase):

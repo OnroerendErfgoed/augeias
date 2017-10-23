@@ -135,7 +135,7 @@ class PairTreeFileSystemStore(IStore):
             raise NotFoundException
 
 
-def _is_allowed_data(data):
+def _is_allowed_data(data):  # pragma: no cover
     # not exhaustive.
     python_version = sys.version_info.major
     if python_version < 3 and isinstance(data, unicode):
