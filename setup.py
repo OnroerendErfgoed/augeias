@@ -10,7 +10,7 @@ with open(os.path.join(here, 'HISTORY.rst')) as f:
 
 requires = [
     'pyramid',
-    'pairtree',
+    'pairtree==0.8',
     'python-magic',
     'pyramid_rewrite'
     ]
