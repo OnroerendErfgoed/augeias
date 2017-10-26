@@ -10,13 +10,14 @@ with open(os.path.join(here, 'HISTORY.rst')) as f:
 
 requires = [
     'pyramid',
-    'pairtree',
+    'ez_setup==0.9',
+    'pairtree==0.8.1',
     'python-magic',
     'pyramid_rewrite'
     ]
 
 setup(name='augeias',
-      version='0.4.0',
+      version='0.4.1',
       description='Augeias. Stores your files.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
