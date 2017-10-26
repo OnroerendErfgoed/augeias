@@ -16,7 +16,7 @@ requires = [
     ]
 
 setup(name='augeias',
-      version='0.4.0',
+      version='0.4.1',
       description='Augeias. Stores your files.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
