@@ -9,9 +9,12 @@ import ast
 from augeias.collections import Collection
 from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
 import json
+import sys
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, 'conf_test.ini'))
+
+python_version = sys.version_info.major
 
 
 def collections_include(config, store_dir):
@@ -50,8 +53,8 @@ class FunctionalTests(unittest.TestCase):
         res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
-        self.assertIn('TEST_CONTAINER_ID', res.body)
-        self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID', res.body)
+        self.assertIn('TEST_CONTAINER_ID', res.text)
+        self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID', res.text)
 
 
     def test_add_object(self):
@@ -65,9 +68,9 @@ class FunctionalTests(unittest.TestCase):
         res = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
         self.assertEqual('200 OK', res.status)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
-                      res.body)
-        self.assertIn('TEST_CONTAINER_ID', res.body)
-        self.assertIn('200x300', res.body)
+                      res.text)
+        self.assertIn('TEST_CONTAINER_ID', res.text)
+        self.assertIn('200x300', res.text)
 
     def test_add_object_content_length_errors(self):
         # create a container
@@ -90,14 +93,14 @@ class FunctionalTests(unittest.TestCase):
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
         self.assertEqual('200 OK', cres.status)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID',
-                      cres.body)
+                      cres.text)
         testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
         with open(testdata, 'rb') as f:
             bdata = f.read()
         file_size = len(bdata)
         ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
-                      ores.body)
+                      ores.text)
         self.assertEqual('200 OK', ores.status)
 
         res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300')
@@ -110,13 +113,13 @@ class FunctionalTests(unittest.TestCase):
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
         self.assertEqual('200 OK', cres.status)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID',
-                      cres.body)
+                      cres.text)
         testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
         with open(testdata, 'rb') as f:
             bdata = f.read()
         ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
-                      ores.body)
+                      ores.text)
         self.assertEqual('200 OK', ores.status)
 
         res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300/meta')
@@ -154,7 +157,7 @@ class FunctionalTests(unittest.TestCase):
 
         res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
         self.assertEqual('200 OK', res.status)
-        l = ast.literal_eval(res.body)
+        l = ast.literal_eval(res.text)
         l = [i.strip() for i in l]
         self.assertTrue('200x300' in l and '400x600' in l)
 
@@ -168,7 +171,7 @@ class FunctionalTests(unittest.TestCase):
         ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
         self.assertEqual('200 OK', ores.status)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
-                      ores.body)
+                      ores.text)
 
         testdata = os.path.join(here, '../', 'fixtures/brug.jpg')
         with open(testdata, 'rb') as f:
@@ -203,7 +206,7 @@ class FunctionalTests(unittest.TestCase):
         ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
         self.assertEqual('200 OK', ores.status)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
-                      ores.body)
+                      ores.text)
         cres2 = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID2')
         self.assertEqual('200 OK', cres2.status)
         json_data = json.dumps({
@@ -278,8 +281,8 @@ class FunctionalTests(unittest.TestCase):
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300',
                       res.json_body['uri'])
         self.assertEqual('200 OK', res.status)
-        self.assertIn('TEST_CONTAINER_ID', res.body)
-        self.assertIn('200x300', res.body)
+        self.assertIn('TEST_CONTAINER_ID', res.text)
+        self.assertIn('200x300', res.text)
 
         res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', status=404,
                                expect_errors=True)
@@ -305,7 +308,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual('201 Created', res.status)
         uuid4hex = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\Z', re.I)
         container_key = res.json_body['container_key']
-        if isinstance(container_key, unicode):
+        if python_version < 3 and isinstance(container_key, unicode):
             container_key = str(container_key)
         self.assertTrue(uuid4hex.match(container_key))
         print(res.json_body['uri'])
@@ -320,7 +323,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual('201 Created', res.status)
         uuid4hex = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\Z', re.I)
         object_key = res.json_body['object_key']
-        if isinstance(object_key, unicode):
+        if python_version < 3 and isinstance(object_key, unicode):
             object_key = str(object_key)
         self.assertTrue(uuid4hex.match(object_key))
         print(res.json_body['uri'])

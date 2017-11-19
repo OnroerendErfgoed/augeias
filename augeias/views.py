@@ -183,9 +183,9 @@ class AugeiasView(object):
 # HELPERS
 
 
-def _is_long(s):
+def _is_integer(s):
     try:
-        long(s)
+        int(s)  # python 2.7 'auto-promotes' int to long if required
         return True
     except ValueError:
         return False
@@ -199,9 +199,9 @@ def _get_object_data(request):
 
 
 def _get_object_data_from_stream(request):
-    if 'Content-Length' not in request.headers or not _is_long(request.headers['Content-Length']):
+    if 'Content-Length' not in request.headers or not _is_integer(request.headers['Content-Length']):
         raise HTTPLengthRequired
-    content_length = long(request.headers['Content-Length'])
+    content_length = int(request.headers['Content-Length'])
     object_data = request.body_file
     if content_length == 0:
         raise HTTPBadRequest('body is empty')
