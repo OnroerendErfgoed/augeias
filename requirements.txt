@@ -8,10 +8,10 @@ pairtree==0.8.1
 python-magic==0.4.13
 
 venusian==1.1.0
-webob==1.7.3
+webob==1.7.4
 PasteDeploy==1.5.2
 
 repoze.lru==0.7
 zope.deprecation==4.3.0
-zope.interface==4.4.2
+zope.interface==4.4.3
 translationstring==1.3

@@ -5,16 +5,16 @@
 pyramid-debugtoolbar==4.3
 
 # Testing
-pytest==3.2.2
+pytest==3.3.0
 pytest-cov==2.5.1
-py==1.4.34
+py==1.5.2
 coveralls==1.2.0
-webtest==2.0.28
+webtest==2.0.29
 mock==2.0.0
 tempdir==0.7.1
 
 # Documentation
-Sphinx==1.6.3
+Sphinx==1.6.5
 sphinxcontrib-httpdomain==1.5.0
 sphinx_rtd_theme==0.2.4
 
@@ -22,7 +22,7 @@ sphinx_rtd_theme==0.2.4
 waitress==1.1.0
 
 # Linting
-flake8==3.4.1
+flake8==3.5.0
 mccabe==0.6.1
-pep8==1.7.0
+pep8==1.7.1
 pyflakes==1.6.0
