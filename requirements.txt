@@ -5,7 +5,7 @@ pyramid_rewrite==0.2
 # pairtree
 ez_setup==0.9
 pairtree==0.8.1
-python-magic==0.4.13
+python-magic==0.4.15
 
 venusian==1.1.0
 webob==1.7.4
