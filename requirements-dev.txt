@@ -15,7 +15,7 @@ tempdir==0.7.1
 
 # Documentation
 Sphinx==1.6.6
-sphinxcontrib-httpdomain==1.5.0
+sphinxcontrib-httpdomain==1.6.0
 sphinx_rtd_theme==0.2.4
 
 # waitress
