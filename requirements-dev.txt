@@ -7,7 +7,7 @@ pyramid-debugtoolbar==4.4
 # Testing
 pytest==3.5.0
 pytest-cov==2.5.1
-py==1.5.2
+py==1.5.3
 coveralls==1.2.0
 webtest==2.0.29
 mock==2.0.0
