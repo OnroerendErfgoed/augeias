@@ -14,7 +14,7 @@ mock==2.0.0
 tempdir==0.7.1
 
 # Documentation
-Sphinx==1.7.1
+Sphinx==1.7.5
 sphinxcontrib-httpdomain==1.6.0
 sphinx_rtd_theme==0.2.4
 
