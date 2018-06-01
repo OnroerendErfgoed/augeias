@@ -13,5 +13,5 @@ PasteDeploy==1.5.2
 
 repoze.lru==0.7
 zope.deprecation==4.3.0
-zope.interface==4.4.3
+zope.interface==4.5.0
 translationstring==1.3
