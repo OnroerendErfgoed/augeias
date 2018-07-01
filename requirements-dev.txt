@@ -9,7 +9,7 @@ pytest==3.6.2
 pytest-cov==2.5.1
 py==1.5.4
 coveralls==1.3.0
-webtest==2.0.29
+webtest==2.0.30
 mock==2.0.0
 tempdir==0.7.1
 
