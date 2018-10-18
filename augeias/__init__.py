@@ -18,7 +18,11 @@ def includeme(config):
     config.add_route('delete_container', pattern='/collections/{collection_key}/containers/{container_key}',
                      request_method="DELETE")
     config.add_route('list_object_keys_for_container',
-                     pattern='/collections/{collection_key}/containers/{container_key}', request_method="GET")
+                     pattern='/collections/{collection_key}/containers/{container_key}', request_method="GET",
+                     accept='application/json')
+    config.add_route('get_container_data',
+                     pattern='/collections/{collection_key}/containers/{container_key}',
+                     request_method="GET", accept='application/zip')
     config.add_route('create_object_and_id', pattern='/collections/{collection_key}/containers/{container_key}',
                      request_method="POST")
     config.add_route('update_object', pattern='/collections/{collection_key}/containers/{container_key}/{object_key}',

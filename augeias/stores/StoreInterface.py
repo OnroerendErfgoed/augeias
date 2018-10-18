@@ -77,6 +77,14 @@ class IStore:
         '''
 
     @abstractmethod
+    def get_container_data(self, container_key):
+        '''
+        Find a container and return a zip file of its contents.
+
+        :param container_key: Key of the container which must be retrieved.
+        :return: a zip file containing all files of the container.
+        '''
+    @abstractmethod
     def create_container(self, container_key):
         '''
         Create a new container in the data store.
