@@ -1,6 +1,9 @@
 import os
 import re
 import unittest
+from io import BytesIO
+from zipfile import ZipFile
+
 import tempdir
 from pyramid.paster import get_appsettings
 from webtest import TestApp
@@ -160,6 +163,31 @@ class FunctionalTests(unittest.TestCase):
         l = ast.literal_eval(res.text)
         l = [i.strip() for i in l]
         self.assertTrue('200x300' in l and '400x600' in l)
+
+    def test_download_container_zip(self):
+        # create container and add objects
+        cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
+        self.assertEqual('200 OK', cres.status)
+        testdata = os.path.join(here, '../', 'fixtures/kasteel.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300', bdata)
+        self.assertEqual('200 OK', ores.status)
+        testdata = os.path.join(here, '../', 'fixtures/brug.jpg')
+        with open(testdata, 'rb') as f:
+            bdata = f.read()
+        ores = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/400x600', bdata)
+        self.assertEqual('200 OK', ores.status)
+
+        res = self.testapp.get('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID',
+                               headers={'Accept': 'application/zip'})
+        self.assertEqual('200 OK', res.status)
+        with ZipFile(BytesIO(res.body)) as zf:
+            filenames = zf.namelist()
+            self.assertEqual(2, len(filenames))
+            self.assertIn('200x300', filenames)
+            self.assertIn('400x600', filenames)
+
 
     def test_update_object(self):
         # create container and add object
