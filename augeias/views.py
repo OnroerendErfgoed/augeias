@@ -134,6 +134,19 @@ class AugeiasView(object):
         res.json_body = collection.object_store.list_object_keys_for_container(container_key)
         return res
 
+    @view_config(route_name='get_container_data', permission='view')
+    def get_container_data(self):
+        '''get a container from the data store'''
+        collection = _retrieve_collection(self.request)
+        container_key = self.request.matchdict['container_key']
+        zip_file = collection.object_store.get_container_data(container_key)
+        filename = str(container_key) + '.zip'
+        disposition = ('attachment; filename={}'.format(filename))
+        res = Response(content_type='application/zip', status=200,
+                       content_disposition=disposition)
+        res.body = zip_file.read()
+        return res
+
     @view_config(route_name='create_container', permission='edit')
     def create_container(self):
         '''create a new container in the data store'''

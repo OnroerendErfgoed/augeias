@@ -2,6 +2,8 @@
 '''
 This module provide a simple filesystem based store
 '''
+from io import BytesIO
+from zipfile import ZipFile
 
 from pairtree import PairtreeStorageFactory, PartNotFoundException, ObjectNotFoundException, id2path
 from augeias.stores.StoreInterface import IStore
@@ -113,6 +115,22 @@ class PairTreeFileSystemStore(IStore):
             container.del_file(object_key)
         except PartNotFoundException:
             raise NotFoundException
+
+    def get_container_data(self, container_key):
+        '''
+        Find a container and return a zip file of its contents.
+
+        :param container_key: Key of the container which must be retrieved.
+        :return: a zip file containing all files of the container.
+        '''
+        container = self.store.get_object(container_key,
+                                          create_if_doesnt_exist=False)
+        in_memory_file = BytesIO()
+        with ZipFile(in_memory_file, 'w') as zf:
+            for object_key in container.list_parts():
+                zf.writestr(object_key, container.get_bytestream(object_key))
+        in_memory_file.seek(0)
+        return in_memory_file
 
     def create_container(self, container_key):
         '''

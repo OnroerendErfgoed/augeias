@@ -17,7 +17,7 @@ requires = [
     ]
 
 setup(name='augeias',
-      version='0.4.1',
+      version='0.5.0',
       description='Augeias. Stores your files.',
       long_description=README + '\n\n' + HISTORY,
       classifiers=[
@@ -27,7 +27,11 @@ setup(name='augeias',
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
       ],
+      python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',
       url='https://augeias.readthedocs.org',
