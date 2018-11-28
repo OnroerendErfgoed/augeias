@@ -1,3 +1,9 @@
+0.5.0 (28-11-2018)
+------------------
+
+- Download zip of entire container (#48)
+- Update list of supported python version (#51)
+
 0.4.1 (26-10-2017)
 ------------------
 
