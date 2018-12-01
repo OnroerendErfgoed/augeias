@@ -8,7 +8,7 @@ pairtree==0.8.1
 python-magic==0.4.15
 
 venusian==1.1.0
-webob==1.8.2
+webob==1.8.4
 PasteDeploy==1.5.2
 
 repoze.lru==0.7
