@@ -9,7 +9,7 @@ python-magic==0.4.15
 
 venusian==1.1.0
 webob==1.8.4
-PasteDeploy==1.5.2
+PasteDeploy==2.0.1
 
 repoze.lru==0.7
 zope.deprecation==4.3.0
