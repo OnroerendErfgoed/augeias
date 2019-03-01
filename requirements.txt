@@ -7,7 +7,7 @@ ez_setup==0.9
 pairtree==0.8.1
 python-magic==0.4.15
 
-venusian==1.1.0
+venusian==1.2.0
 webob==1.8.2
 PasteDeploy==1.5.2
 
