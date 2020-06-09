@@ -1,5 +1,7 @@
 import os
 import unittest
+from zipfile import ZipFile
+
 import tempdir
 from augeias.stores.CephStore import CephStore
 from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore, _is_allowed_data, _validate_data
@@ -92,6 +94,26 @@ class TestPairTreeStore(unittest.TestCase):
         except NotFoundException:
             error_raised = True
         self.assertTrue(error_raised)
+
+    def test_get_container_data(self):
+        container_key = 'container'
+        self.store.create_container(container_key)
+        self.store.create_object(container_key, 'object_key', b'file-data')
+
+        zip_file = self.store.get_container_data(container_key)
+        with ZipFile(zip_file) as zf:
+            filenames = zf.namelist()
+            self.assertEqual(1, len(filenames))
+            self.assertIn('object_key', filenames)
+
+        zip_file = self.store.get_container_data(
+            container_key,
+            translations={'object_key': 'filename.pdf'}
+        )
+        with ZipFile(zip_file) as zf:
+            filenames = zf.namelist()
+            self.assertEqual(1, len(filenames))
+            self.assertIn('filename.pdf', filenames)
 
     def test_delete_container(self):
         self.store.create_container('x')
