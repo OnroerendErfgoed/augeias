@@ -1,3 +1,8 @@
+0.6.0 (09-06-2020)
+------------------
+
+- Lijst met vertaling van id naar bestandsnaam meesturen download zip (#80)
+
 0.5.0 (28-11-2018)
 ------------------
 

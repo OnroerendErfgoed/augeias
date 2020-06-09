@@ -136,10 +136,13 @@ class AugeiasView(object):
 
     @view_config(route_name='get_container_data', permission='view')
     def get_container_data(self):
-        '''get a container from the data store'''
+        """Get a container from the data store as zip."""
+        parameters = self.request.GET
         collection = _retrieve_collection(self.request)
         container_key = self.request.matchdict['container_key']
-        zip_file = collection.object_store.get_container_data(container_key)
+        zip_file = collection.object_store.get_container_data(
+            container_key, translations=parameters
+        )
         filename = str(container_key) + '.zip'
         disposition = ('attachment; filename={}'.format(filename))
         res = Response(content_type='application/zip', status=200,

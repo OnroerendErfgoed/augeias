@@ -2,16 +2,10 @@ language: python
 sudo: false
 python:
   - "2.7"
-  - "3.5"
   - "3.6"
 env:
   - PROJECT=augeias
-notifications:
-  email:
-    - klaas.millet@rwo.vlaanderen.be
-    - bart.saelen@geosolutions.be
-    - wouter.claeys@rwo.vlaanderen.be
-install: 
+install:
   - pip install -r requirements-dev.txt
   - python setup.py develop
 script: 

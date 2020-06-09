@@ -5,6 +5,7 @@ This module defines the interface every store needs to adhere to.
 
 from abc import ABCMeta, abstractmethod
 
+
 class IStore:
     '''
     This interface handles object-storage.
@@ -77,11 +78,12 @@ class IStore:
         '''
 
     @abstractmethod
-    def get_container_data(self, container_key):
+    def get_container_data(self, container_key, translations=None):
         '''
         Find a container and return a zip file of its contents.
 
         :param container_key: Key of the container which must be retrieved.
+        :param translations: Dict of object IDs and file names to use for them.
         :return: a zip file containing all files of the container.
         '''
     @abstractmethod

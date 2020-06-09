@@ -1,17 +1,8 @@
 # pyramid
-pyramid==1.9.2
+pyramid==1.10.4
 pyramid_rewrite==0.2
 
 # pairtree
 ez_setup==0.9
 pairtree==0.8.1
 python-magic==0.4.15
-
-venusian==1.1.0
-webob==1.8.2
-PasteDeploy==1.5.2
-
-repoze.lru==0.7
-zope.deprecation==4.3.0
-zope.interface==4.5.0
-translationstring==1.3
