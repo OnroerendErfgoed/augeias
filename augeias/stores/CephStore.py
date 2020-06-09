@@ -24,7 +24,7 @@ class CephStore(IStore):
     def update_object(self, container_key, object_key, object_data):
         pass
 
-    def get_container_data(self, container_key):
+    def get_container_data(self, container_key, translations=None):
         pass
 
     def create_container(self, container_key):

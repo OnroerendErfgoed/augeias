@@ -59,7 +59,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertIn('TEST_CONTAINER_ID', res.text)
         self.assertIn(self.storage_location + 'collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID', res.text)
 
-
     def test_add_object(self):
         # create a container
         cres = self.testapp.put('/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID')
@@ -186,6 +185,17 @@ class FunctionalTests(unittest.TestCase):
             filenames = zf.namelist()
             self.assertEqual(2, len(filenames))
             self.assertIn('200x300', filenames)
+            self.assertIn('400x600', filenames)
+
+        res = self.testapp.get(
+            '/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID?200x300=file1.pdf',
+            headers={'Accept': 'application/zip'}
+        )
+        self.assertEqual('200 OK', res.status)
+        with ZipFile(BytesIO(res.body)) as zf:
+            filenames = zf.namelist()
+            self.assertEqual(2, len(filenames))
+            self.assertIn('file1.pdf', filenames)
             self.assertIn('400x600', filenames)
 
 

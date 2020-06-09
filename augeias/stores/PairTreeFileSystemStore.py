@@ -116,19 +116,24 @@ class PairTreeFileSystemStore(IStore):
         except PartNotFoundException:
             raise NotFoundException
 
-    def get_container_data(self, container_key):
-        '''
+    def get_container_data(self, container_key, translations=None):
+        """
         Find a container and return a zip file of its contents.
 
         :param container_key: Key of the container which must be retrieved.
+        :param translations: Dict of object IDs and file names to use for them.
         :return: a zip file containing all files of the container.
-        '''
+        """
+        translations = translations or {}
         container = self.store.get_object(container_key,
                                           create_if_doesnt_exist=False)
         in_memory_file = BytesIO()
         with ZipFile(in_memory_file, 'w') as zf:
             for object_key in container.list_parts():
-                zf.writestr(object_key, container.get_bytestream(object_key))
+                zf.writestr(
+                    translations.get(object_key, object_key),
+                    container.get_bytestream(object_key)
+                )
         in_memory_file.seek(0)
         return in_memory_file
 
