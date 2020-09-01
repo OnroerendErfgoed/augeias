@@ -16,7 +16,7 @@ webtest==2.0.35
 Sphinx==3.2.1; python_version > '3.0'
 Sphinx==3.2.1; python_version < '3.0'
 sphinxcontrib-httpdomain==1.7.0
-sphinx_rtd_theme==0.4.3
+sphinx_rtd_theme==0.5.0
 
 # waitress
 waitress==1.4.4
