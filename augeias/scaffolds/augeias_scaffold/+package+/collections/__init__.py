@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from augeias.stores.PairTreeFileSystemStore import PairTreeFileSystemStore
 from augeias.collections.model import Collection
 
