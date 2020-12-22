@@ -1,6 +1,8 @@
 import unittest
-from augeias.uri import UriPatternGenerator, DefaultUriGenerator
+
 from augeias.collections import Collection
+from augeias.uri import DefaultUriGenerator
+from augeias.uri import UriPatternGenerator
 
 
 class TestUriPatternGenerator(unittest.TestCase):
