@@ -1,13 +1,9 @@
 import unittest
+from unittest.mock import Mock
 
 from pyramid import testing
 
 from augeias.views import AugeiasView
-
-try:
-    from unittest.mock import Mock
-except ImportError:
-    from mock import Mock  # pragma: no cover
 
 
 class ViewTests(unittest.TestCase):

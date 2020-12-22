@@ -2,19 +2,16 @@
 --requirement requirements.txt
 
 # pyramid
-pyramid-debugtoolbar==4.6.1
+pyramid-debugtoolbar==4.9
 
 # Testing
-pytest==5.4.3; python_version > '3.0'
-pytest==4.6.11; python_version < '3.0'
-pytest-cov==2.9.0
-mock==3.0.5; python_version < '3.0'
+pytest==6.2.1
+pytest-cov==2.10.1
 tempdir==0.7.1
 webtest==2.0.35
 
 # Documentation
-Sphinx==3.1.0; python_version > '3.0'
-Sphinx==1.8.5; python_version < '3.0'
+Sphinx==3.4.0
 sphinxcontrib-httpdomain==1.7.0
 sphinx_rtd_theme==0.4.3
 
@@ -22,4 +19,4 @@ sphinx_rtd_theme==0.4.3
 waitress==1.4.4
 
 # Linting
-flake8==3.8.3
+flake8==3.8.4
