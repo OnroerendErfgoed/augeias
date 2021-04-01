@@ -16,7 +16,7 @@ sphinxcontrib-httpdomain==1.7.0
 sphinx_rtd_theme==0.5.1
 
 # waitress
-waitress==1.4.4
+waitress==2.0.0
 
 # Linting
 flake8==3.8.4
