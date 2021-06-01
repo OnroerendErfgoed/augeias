@@ -11,7 +11,7 @@ tempdir==0.7.1
 webtest==2.0.35
 
 # Documentation
-Sphinx==3.4.0
+Sphinx==4.0.2
 sphinxcontrib-httpdomain==1.7.0
 sphinx_rtd_theme==0.4.3
 
