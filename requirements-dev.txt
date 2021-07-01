@@ -13,7 +13,7 @@ webtest==2.0.35
 # Documentation
 Sphinx==4.0.2
 sphinxcontrib-httpdomain==1.7.0
-sphinx_rtd_theme==0.4.3
+sphinx_rtd_theme==0.5.2
 
 # waitress
 waitress==1.4.4
