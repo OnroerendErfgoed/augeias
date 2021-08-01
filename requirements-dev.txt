@@ -6,7 +6,7 @@ pyramid-debugtoolbar==4.9
 
 # Testing
 pytest==6.2.4
-pytest-cov==2.10.1
+pytest-cov==2.12.1
 tempdir==0.7.1
 webtest==2.0.35
 
