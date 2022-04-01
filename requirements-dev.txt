@@ -8,7 +8,7 @@ pyramid-debugtoolbar==4.9
 pytest==7.1.1
 pytest-cov==3.0.0
 tempdir==0.7.1
-webtest==2.0.35
+webtest==3.0.0
 
 # Documentation
 Sphinx==3.4.0
