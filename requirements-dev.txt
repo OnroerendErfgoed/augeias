@@ -5,18 +5,18 @@
 pyramid-debugtoolbar==4.9
 
 # Testing
-pytest==6.2.1
-pytest-cov==2.10.1
+pytest==6.2.5
+pytest-cov==3.0.0
 tempdir==0.7.1
-webtest==2.0.35
+webtest==3.0.0
 
 # Documentation
-Sphinx==3.4.0
-sphinxcontrib-httpdomain==1.7.0
-sphinx_rtd_theme==0.4.3
+Sphinx==4.3.2
+sphinxcontrib-httpdomain==1.8.0
+sphinx_rtd_theme==1.0.0
 
 # waitress
-waitress==1.4.4
+waitress==2.0.0
 
 # Linting
-flake8==3.8.4
+flake8==4.0.1
