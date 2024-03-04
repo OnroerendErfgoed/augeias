@@ -72,18 +72,18 @@ class AugeiasView:
         }
         return res
 
-    @view_config(route_name='update_file_in_zip', permission='edit')
+    @view_config(route_name="update_file_in_zip", permission="edit")
     def update_file_in_zip(self):
         """
         Update a file in an archive object in the data store.
         """
         file_content = _get_object_data(self.request)
         collection = _retrieve_collection(self.request)
-        container_key = self.request.matchdict['container_key']
-        object_key = self.request.matchdict['object_key']
-        file_to_replace = self.request.matchdict['file_name']
-        if not "new_file_name" in self.request.params:
-            raise HTTPBadRequest("new_file parameter is required")
+        container_key = self.request.matchdict["container_key"]
+        object_key = self.request.matchdict["object_key"]
+        file_to_replace = self.request.matchdict["file_name"]
+        if "new_file_name" not in self.request.params:
+            raise HTTPBadRequest("new_file_name parameter is required")
         new_file_name = self.request.params["new_file_name"]
         zip_content = collection.object_store.get_object(
             container_key, object_key
@@ -94,31 +94,31 @@ class AugeiasView:
         collection.object_store.update_object(
             container_key, object_key, new_archive
         )
-        res = Response(content_type='application/json', status=200)
+        res = Response(content_type="application/json", status=200)
         res.json_body = {
-            'container_key': container_key,
-            'object_key': object_key,
-            'uri': collection.uri_generator.generate_object_uri(
+            "container_key": container_key,
+            "object_key": object_key,
+            "uri": collection.uri_generator.generate_object_uri(
                 collection=collection.name,
                 container=container_key,
                 object=object_key)
         }
         return res
 
-    @view_config(route_name='create_object_and_id', permission='edit')
+    @view_config(route_name="create_object_and_id", permission="edit")
     def create_object_and_id(self):
         """create an object in the data store and generate an id"""
         object_data = _get_object_data(self.request)
         collection = _retrieve_collection(self.request)
-        container_key = self.request.matchdict['container_key']
+        container_key = self.request.matchdict["container_key"]
         object_key = str(uuid.uuid4())
         collection.object_store.update_object(
             container_key, object_key, object_data)
-        res = Response(content_type='application/json', status=201)
+        res = Response(content_type="application/json", status=201)
         res.json_body = {
-            'container_key': container_key,
-            'object_key': object_key,
-            'uri': collection.uri_generator.generate_object_uri(
+            "container_key": container_key,
+            "object_key": object_key,
+            "uri": collection.uri_generator.generate_object_uri(
                 collection=collection.name,
                 container=container_key,
                 object=object_key)
