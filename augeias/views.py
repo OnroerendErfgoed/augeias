@@ -1,7 +1,12 @@
+import io
+import tarfile
 import uuid
+import zipfile
 
+from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPLengthRequired
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.response import Response
-from pyramid.httpexceptions import HTTPLengthRequired, HTTPBadRequest, HTTPNotFound
 from pyramid.view import view_config
 
 from augeias.stores.error import NotFoundException
@@ -67,20 +72,53 @@ class AugeiasView:
         }
         return res
 
-    @view_config(route_name='create_object_and_id', permission='edit')
+    @view_config(route_name="update_file_in_zip", permission="edit")
+    def update_file_in_zip(self):
+        """
+        Update a file in an archive object in the data store.
+        """
+        file_content = _get_object_data(self.request)
+        collection = _retrieve_collection(self.request)
+        container_key = self.request.matchdict["container_key"]
+        object_key = self.request.matchdict["object_key"]
+        file_to_replace = self.request.matchdict["file_name"]
+        if "new_file_name" not in self.request.params:
+            raise HTTPBadRequest("new_file_name parameter is required")
+        new_file_name = self.request.params["new_file_name"]
+        zip_content = collection.object_store.get_object(
+            container_key, object_key
+        )
+        new_archive = replace_file_in_zip(
+            zip_content, file_to_replace, file_content.read(), new_file_name
+        )
+        collection.object_store.update_object(
+            container_key, object_key, new_archive
+        )
+        res = Response(content_type="application/json", status=200)
+        res.json_body = {
+            "container_key": container_key,
+            "object_key": object_key,
+            "uri": collection.uri_generator.generate_object_uri(
+                collection=collection.name,
+                container=container_key,
+                object=object_key)
+        }
+        return res
+
+    @view_config(route_name="create_object_and_id", permission="edit")
     def create_object_and_id(self):
         """create an object in the data store and generate an id"""
         object_data = _get_object_data(self.request)
         collection = _retrieve_collection(self.request)
-        container_key = self.request.matchdict['container_key']
+        container_key = self.request.matchdict["container_key"]
         object_key = str(uuid.uuid4())
         collection.object_store.update_object(
             container_key, object_key, object_data)
-        res = Response(content_type='application/json', status=201)
+        res = Response(content_type="application/json", status=201)
         res.json_body = {
-            'container_key': container_key,
-            'object_key': object_key,
-            'uri': collection.uri_generator.generate_object_uri(
+            "container_key": container_key,
+            "object_key": object_key,
+            "uri": collection.uri_generator.generate_object_uri(
                 collection=collection.name,
                 container=container_key,
                 object=object_key)
@@ -117,6 +155,20 @@ class AugeiasView:
             container_key, object_key)['mime']
         res = Response(content_type=content_type, status=200)
         res.body = object_data
+        return res
+
+    @view_config(route_name='get_file_from_zip', permission='view')
+    def get_object_from_archive(self):
+        """retrieve a file from an archive object from the data store"""
+        collection = _retrieve_collection(self.request)
+        container_key = self.request.matchdict['container_key']
+        object_key = self.request.matchdict['object_key']
+        object_data = collection.object_store.get_object(
+            container_key, object_key
+        )
+        file = get_file_from_archive(object_data, self.request.matchdict['file_name'])
+        res = Response(content_type='application/octet-stream', status=200)
+        res.body = file
         return res
 
     @view_config(route_name='get_object_info', permission='view')
@@ -276,3 +328,86 @@ def _retrieve_collection(request):
     else:
         raise HTTPNotFound('collection not found')
     return collection
+
+
+def get_file_from_archive(archive_bytes, file_name):
+    """
+    get a file from a zip/tar in the data store
+
+    :param container_key: key of the container in the data store
+    :param object_key: specific object key for the object in the container
+    :param file_name: name of the file to get from the zip
+    :return content of the file or None
+    """
+    archive_bytes_as_file = io.BytesIO(archive_bytes)
+    for name, file_bytes in get_archive_members(archive_bytes_as_file):
+        if name == file_name:
+            return file_bytes
+    raise HTTPBadRequest("File not found in archive")
+
+
+def get_archive_members(archive_content):
+    """
+    yield the members of a zip or tar archive
+
+    :param archive_content: content of the archive
+    :return: generator of the members of the archive
+    """
+    with open_archive(archive_content) as archive:
+        if isinstance(archive, zipfile.ZipFile):
+            for name in archive.namelist():
+                yield name, archive.read(name)
+        else:
+            for member in archive.getmembers():
+                f = archive.extractfile(member)
+                yield member.name, f.read()
+
+
+def open_archive(archive_content):
+    """
+    Open a zip or tar archive
+
+    :param archive_content: content of the archive
+    :return: the opened archive
+    """
+    if zipfile.is_zipfile(archive_content):
+        archive_content.seek(0)  # the zip check actually reads the bytes, so reset.
+        return zipfile.ZipFile(archive_content)
+    else:
+        archive_content.seek(0)
+        return tarfile.open(fileobj=archive_content)
+
+
+def replace_file_in_zip(zip_content, file_to_replace, file_content, new_file_name):
+    """
+    Replace a file in a zip file with new content
+
+    :param zip_content: content of the original zip file
+    :param file_to_replace: name of the file to replace
+    :param file_content: content of the new file
+    :param new_file_name: name of the new file
+    :return: content of the updated zip file
+    """
+    with io.BytesIO(zip_content) as original_zip_buffer:
+        with zipfile.ZipFile(original_zip_buffer, "r") as original_zip:
+            # Create a new in-memory zip file
+            with io.BytesIO() as new_zip_buffer:
+                with zipfile.ZipFile(
+                    new_zip_buffer, "a", zipfile.ZIP_DEFLATED
+                ) as new_zip:
+                    current_file_names = original_zip.namelist()
+                    if file_to_replace not in current_file_names:
+                        raise HTTPBadRequest("File to replace not found in archive")
+                    for filename in current_file_names:
+                        # Skip the file to be replaced
+                        if filename == file_to_replace:
+                            continue
+                        # Copy all other files
+                        content = original_zip.read(filename)
+                        new_zip.writestr(filename, content)
+                    # Add the new file
+                    new_zip.writestr(new_file_name, file_content)
+                # Get the content of the new zip file
+                updated_zip_content = new_zip_buffer.getvalue()
+
+    return updated_zip_content
