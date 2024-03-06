@@ -1,3 +1,8 @@
+0.8.0 (06-03-2024)
+------------------
+
+- Add replace file in archive and fetch file from archive (#115)
+
 0.7.0 (22-12-2020)
 ------------------
 

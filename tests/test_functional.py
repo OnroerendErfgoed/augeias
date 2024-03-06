@@ -1,8 +1,10 @@
 import ast
+import io
 import json
 import os
 import re
 import unittest
+import zipfile
 from io import BytesIO
 from zipfile import ZipFile
 
@@ -403,3 +405,80 @@ class FunctionalTests(unittest.TestCase):
         object_key = res.json_body['object_key']
         self.assertTrue(uuid4hex.match(object_key))
         print(res.json_body['uri'])
+
+    def test_update_file_in_zip(self):
+        # create container and add object
+        self.testapp.put("/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID")
+        with open(os.path.join(here, "../", "fixtures/test_archive.zip"), "rb") as f:
+            bdata = f.read()
+        self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/002", bdata
+        )
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/002"
+        )
+        self.assertEqual("200 OK", res.status)
+        zip_file = io.BytesIO(res.body)
+        with zipfile.ZipFile(zip_file) as zip_f:
+            self.assertCountEqual(["brug.jpg", "kasteel.jpg"], zip_f.namelist())
+        with open(os.path.join(here, "../", "fixtures/kerk.jpg"), "rb") as f:
+            new_file = f.read()
+        res = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/"
+            "TEST_CONTAINER_ID/002/brug.jpg?new_file_name=kerk.jpg",
+            new_file,
+        )
+        self.assertEqual("200 OK", res.status)
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/002"
+        )
+        self.assertEqual("200 OK", res.status)
+        new_zip_file = io.BytesIO(res.body)
+        with zipfile.ZipFile(new_zip_file) as new_zip:
+            self.assertCountEqual(["kerk.jpg", "kasteel.jpg"], new_zip.namelist())
+
+        res = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/"
+            "TEST_CONTAINER_ID/002/lol.jpg?new_file_name=kerk.jpg",
+            new_file,
+            expect_errors=True,
+        )
+        self.assertEqual(res.status_code, 400)
+        res = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/"
+            "TEST_CONTAINER_ID/002/lol.jpg",
+            new_file,
+            expect_errors=True,
+        )
+        self.assertEqual(res.status_code, 400)
+
+
+    def test_get_file_from_zip(self):
+        # create container and add object
+        cres = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID")
+        self.assertEqual("200 OK", cres.status)
+        testdata = os.path.join(here, "../", "fixtures/test_archive.zip")
+        with open(testdata, "rb") as f:
+            bdata = f.read()
+            f.seek(0)
+            with zipfile.ZipFile(f) as zip_ref:
+                file_size = zip_ref.getinfo("brug.jpg").file_size
+                file = zip_ref.read("brug.jpg")
+        # Add original zip file
+        ores = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/001", bdata
+        )
+        self.assertEqual("200 OK", ores.status)
+        # get file from zip
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/001/brug.jpg"
+        )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(file_size, len(res.body))
+        self.assertEqual(file, res.body)
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/001/lol.jpg",
+            expect_errors=True,
+        )
+        self.assertEqual(res.status_code, 400)
