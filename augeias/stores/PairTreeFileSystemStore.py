@@ -2,15 +2,14 @@
 This module provide a simple filesystem based store
 """
 import datetime
+import magic
 import os
 from io import BytesIO
-from zipfile import ZipFile
-
-import magic
 from pairtree import ObjectNotFoundException
 from pairtree import PairtreeStorageFactory
 from pairtree import PartNotFoundException
 from pairtree import id2path
+from zipfile import ZipFile
 
 from augeias.stores.StoreInterface import IStore
 from augeias.stores.error import NotFoundException
@@ -122,22 +121,29 @@ class PairTreeFileSystemStore(IStore):
 
     def get_container_data(self, container_key, translations=None):
         """
-        Find a container and return a zip file of its contents.
+        Find a container and return a zip file of the requested objects.
+        If translations exist, only the files within translations.keys() will be provided
 
         :param container_key: Key of the container which must be retrieved.
         :param translations: Dict of object IDs and file names to use for them.
         :return: a zip file containing all files of the container.
         """
         translations = translations or {}
-        container = self.store.get_object(container_key,
-                                          create_if_doesnt_exist=False)
+        container = self.store.get_object(
+            container_key,
+            create_if_doesnt_exist=False
+        )
+        object_list = translations.keys() if translations else container.list_parts()
         in_memory_file = BytesIO()
-        with ZipFile(in_memory_file, 'w') as zf:
-            for object_key in container.list_parts():
-                zf.writestr(
-                    translations.get(object_key, object_key),
-                    container.get_bytestream(object_key)
-                )
+        try:
+            with ZipFile(in_memory_file, 'w') as zf:
+                for object_key in object_list:
+                    zf.writestr(
+                        translations.get(object_key, object_key),
+                        container.get_bytestream(object_key)
+                    )
+        except PartNotFoundException:
+            raise NotFoundException
         in_memory_file.seek(0)
         return in_memory_file
 
