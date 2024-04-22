@@ -194,7 +194,7 @@ class AugeiasView:
 
     @view_config(route_name='get_container_data', permission='view')
     def get_container_data(self):
-        """Get a container from the data store as zip."""
+        """Get a container or part of its objects from the data store as zip."""
         parameters = self.request.GET
         collection = _retrieve_collection(self.request)
         container_key = self.request.matchdict['container_key']
@@ -203,8 +203,11 @@ class AugeiasView:
         )
         filename = str(container_key) + '.zip'
         disposition = (f'attachment; filename={filename}')
-        res = Response(content_type='application/zip', status=200,
-                       content_disposition=disposition)
+        res = Response(
+            content_type='application/zip',
+            status=200,
+            content_disposition=disposition
+        )
         res.body = zip_file.read()
         return res
 

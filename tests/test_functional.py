@@ -213,7 +213,8 @@ class FunctionalTests(unittest.TestCase):
             self.assertIn('400x600', filenames)
 
         res = self.testapp.get(
-            '/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID?200x300=file1.pdf',
+            '/collections/TEST_COLLECTION/containers'
+            '/TEST_CONTAINER_ID?200x300=file1.pdf&400x600=400x600',
             headers={'Accept': 'application/zip'}
         )
         self.assertEqual('200 OK', res.status)
@@ -482,3 +483,48 @@ class FunctionalTests(unittest.TestCase):
             expect_errors=True,
         )
         self.assertEqual(res.status_code, 400)
+
+    def test_get_objects_as_zip(self):
+        # create container and add object
+        zip_header = {"Accept": "Application/zip"}
+        cres = self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID")
+        self.assertEqual("200 OK", cres.status)
+        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        with open(testdata, "rb") as f:
+            bdata = f.read()
+        self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/001", bdata
+        )
+        testdata = os.path.join(here, "../", "fixtures/brug.jpg")
+        with open(testdata, "rb") as f:
+            bdata = f.read()
+        self.testapp.put(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/002", bdata
+        )
+        # get objects
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID?001=custom_name.jpg",
+            headers=zip_header,
+        )
+        self.assertEqual("200 OK", res.status)
+        zip_file = io.BytesIO(res.body)
+        with zipfile.ZipFile(zip_file, "r") as zip_ref:
+            file_list = zip_ref.namelist()
+        self.assertCountEqual(["custom_name.jpg"], file_list)
+        # get zip objects
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID?002=test.jpg",
+            headers=zip_header,
+        )
+        self.assertEqual("200 OK", res.status)
+        zip_file = io.BytesIO(res.body)
+        with zipfile.ZipFile(zip_file, "r") as zip_ref:
+            file_list = zip_ref.namelist()
+        self.assertCountEqual(["test.jpg"], file_list)
+        res = self.testapp.get(
+            "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID?005=brug.jpg",
+            headers=zip_header,
+            expect_errors=True,
+        )
+        self.assertEqual(res.status_code, 404)
