@@ -1,8 +1,31 @@
-# pyramid
-pyramid==1.10.5
-pyramid_rewrite==0.2
-
-# pairtree
-ez_setup==0.9
+ez-setup==0.9
+hupper==1.12.1
+    # via pyramid
 pairtree==0.8.1
-python-magic==0.4.18
+pastedeploy==3.1.0
+    # via plaster-pastedeploy
+plaster==1.1.2
+    # via
+    #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==1.0.1
+    # via pyramid
+pyramid==2.0.2
+    # via pyramid-rewrite
+pyramid-rewrite==0.2
+python-magic==0.4.27
+setuptools==70.0.0
+    # via
+    #   pyramid
+    #   zope-deprecation
+    #   zope-interface
+translationstring==1.4
+    # via pyramid
+venusian==3.1.0
+    # via pyramid
+webob==1.8.7
+    # via pyramid
+zope-deprecation==5.0
+    # via pyramid
+zope-interface==6.4.post2
+    # via pyramid

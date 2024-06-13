@@ -1,0 +1,13 @@
+[flake8]
+application_import_names = augeias, tests
+exclude = .venv,
+          .venv2,
+          alembic,
+          .tox,
+          venv,
+          __pycache__,
+          docs,
+          fabfile.py
+import-order-style = pycharm
+max-line-length = 90
+ignore = E402, E405, W503, F403, F405

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["hatchling", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[project]
+version = "0.8.0"
+name = "augeias"
+dynamic = ["readme"]
+authors = [
+    { name = "Flanders Heritage Agency", email = "ict@onroerenderfgoed.be" },
+]
+description = "ugeias. Stores your files."
+requires-python = ">=3.10,<3.13"
+keywords = ["web", "wsgi", "pyramid", "SKOS", "thesaurus", "vocabulary"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+    "Framework :: Pyramid",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "ez_setup==0.9",
+    "hatch-fancy-pypi-readme==24.1.0",
+    "pairtree==0.8.1",
+    "pyramid==2.0.2",
+    "pyramid_rewrite==0.2",
+    "python-magic==0.4.27"
+]
+
+[project.urls]
+History = "https://github.com/OnroerendErfgoed/augeias/blob/master/CHANGES.rst"
+Tracker = "https://github.com/OnroerendErfgoed/augeias/issues"
+Source = "https://github.com/OnroerendErfgoed/augeias"
+Documentation = "https://augeias.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+dev = [
+    "flake8==7.0.0",
+    "hatchling==1.24.2",
+    "pyramid-debugtoolbar==4.12.1",
+    "pytest-cov==5.0.0",
+    "pytest==8.2.2",
+    "sphinx==7.3.7",
+    "sphinx_rtd_theme==2.0.0",
+    "sphinxcontrib-httpdomain==1.8.1",
+    "tempdir==0.7.1",
+    "uv==0.1.38",
+    "waitress==3.0.0",
+    "webtest==3.0.0"
+]
+
+[project.entry-points."paste.app_factory"]
+main = "augeias:main"
+
+##
+# Build tool specific
+##
+[tool.hatch.build.targets.wheel]
+# In the wheel we want to have augeias in the root as python module.
+only-include = [
+    "/augeias",
+    "/fixtures",
+]
+
+[tool.hatch.metadata]
+# This allows us to use github links as dependencies
+allow-direct-references = true
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/x-rst"
+fragments = [
+    { path = "README.md" },
+    { path = "HISTORY.rst" },
+]

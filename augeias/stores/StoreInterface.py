@@ -11,6 +11,7 @@ class IStore:
     Implementations of this interface can be made for different object-storages
     Currently this interface is only implemented for PairTreeFileSystemStore
     """
+
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -21,7 +22,8 @@ class IStore:
         :param str container_key: Key of the container to create an object in.
         :param str object_key: Key of the object to create.
         :param str object_data: The data for the object to create.
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """
 
     @abstractmethod
@@ -31,7 +33,8 @@ class IStore:
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to delete.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
 
     @abstractmethod
@@ -41,7 +44,8 @@ class IStore:
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to retrieve.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
 
     @abstractmethod
@@ -51,7 +55,8 @@ class IStore:
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to retrieve.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
 
     @abstractmethod
@@ -62,7 +67,8 @@ class IStore:
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to update.
         :param str object_data: New data for the object.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
 
     @abstractmethod
@@ -73,7 +79,8 @@ class IStore:
         :param str container_key: Key of the container to list the objects for.
         :returns: A list of container keys.
         :rtype: lst
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """
 
     @abstractmethod
@@ -100,5 +107,6 @@ class IStore:
         Delete a container and all it's objects in the data store.
 
         :param str container_key: Key of the container to delete.
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """

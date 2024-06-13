@@ -1,15 +1,17 @@
 """
 This module provide a simple filesystem based store
 """
+
 import datetime
-import magic
 import os
 from io import BytesIO
+from zipfile import ZipFile
+
+import magic
 from pairtree import ObjectNotFoundException
 from pairtree import PairtreeStorageFactory
 from pairtree import PartNotFoundException
 from pairtree import id2path
-from zipfile import ZipFile
 
 from augeias.stores.StoreInterface import IStore
 from augeias.stores.error import NotFoundException
@@ -22,7 +24,7 @@ class PairTreeFileSystemStore(IStore):
     Will store your digital objects on disk using a PairTree.
     """
 
-    def __init__(self, store_dir, uri_base='urn:x-vioe:'):
+    def __init__(self, store_dir, uri_base="urn:x-vioe:"):
         sf = PairtreeStorageFactory()
         self.store = sf.get_store(store_dir=store_dir, uri_base=uri_base)
 
@@ -38,7 +40,8 @@ class PairTreeFileSystemStore(IStore):
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to retrieve.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
         container = self._get_container(container_key)
         try:
@@ -48,23 +51,27 @@ class PairTreeFileSystemStore(IStore):
 
     def get_object_info(self, container_key, object_key):
         """
-        Retrieve object info (mimetype, size, time last modification) from the data store.
+        Retrieve object info (mimetype, size, time last modification)
+        from the data store.
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to retrieve.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
-        # todo magic.from_buffer(open(file_path).read(1048576), mime=True) cannot microsoft mimetypes
-        # https://stackoverflow.com/questions/17779560/django-python-magic-identify-ppt-docx-word-uploaded-file-as-application-zip
-        file_path = '/'.join([self.store.store_dir,
-                              'pairtree_root', id2path(container_key), object_key])
+        file_path = "/".join(
+            [self.store.store_dir, "pairtree_root", id2path(container_key), object_key]
+        )
         if not os.path.exists(file_path):
             raise NotFoundException
         file_stat = os.stat(file_path)
         return {
-            'time_last_modification': datetime.datetime.fromtimestamp(file_stat.st_mtime).isoformat(),
-            'size': file_stat.st_size,
-            'mime': magic.from_buffer(open(file_path, 'rb').read(1048576), mime=True) or 'application/octet-stream'
+            "time_last_modification": datetime.datetime.fromtimestamp(
+                file_stat.st_mtime
+            ).isoformat(),
+            "size": file_stat.st_size,
+            "mime": magic.from_buffer(open(file_path, "rb").read(1048576), mime=True)
+            or "application/octet-stream",
         }
 
     def create_object(self, container_key, object_key, object_data):
@@ -74,7 +81,8 @@ class PairTreeFileSystemStore(IStore):
         :param str container_key: Key of the container to create an object in.
         :param str object_key: Key of the object to create.
         :param str object_data: The data for the object to create.
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """
         _validate_data(object_data)
         container = self._get_container(container_key)
@@ -87,7 +95,8 @@ class PairTreeFileSystemStore(IStore):
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to update.
         :param str object_data: New data for the object.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
         _validate_data(object_data)
         container = self.store.get_object(container_key, False)
@@ -100,7 +109,8 @@ class PairTreeFileSystemStore(IStore):
         :param str container_key: Key of the container to list the objects for.
         :returns: A list of container keys.
         :rtype: lst
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """
         container = self._get_container(container_key)
         return container.list_parts()
@@ -111,7 +121,8 @@ class PairTreeFileSystemStore(IStore):
 
         :param str container_key: Key of the container that the object lives in.
         :param str object_key: Key of the object to delete.
-        :raises augeias.stores.error.NotFoundException: When the object or container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the object or container could not be found.
         """
         container = self._get_container(container_key)
         try:
@@ -129,18 +140,15 @@ class PairTreeFileSystemStore(IStore):
         :return: a zip file containing all files of the container.
         """
         translations = translations or {}
-        container = self.store.get_object(
-            container_key,
-            create_if_doesnt_exist=False
-        )
+        container = self.store.get_object(container_key, create_if_doesnt_exist=False)
         object_list = translations.keys() if translations else container.list_parts()
         in_memory_file = BytesIO()
         try:
-            with ZipFile(in_memory_file, 'w') as zf:
+            with ZipFile(in_memory_file, "w") as zf:
                 for object_key in object_list:
                     zf.writestr(
                         translations.get(object_key, object_key),
-                        container.get_bytestream(object_key)
+                        container.get_bytestream(object_key),
                     )
         except PartNotFoundException:
             raise NotFoundException
@@ -160,7 +168,8 @@ class PairTreeFileSystemStore(IStore):
         Delete a container and all it's objects in the data store.
 
         :param str container_key: Key of the container to delete.
-        :raises augeias.stores.error.NotFoundException: When the container could not be found.
+        :raises augeias.stores.error.NotFoundException:
+        When the container could not be found.
         """
         try:
             self.store.delete_object(container_key)
@@ -178,4 +187,4 @@ def _is_allowed_data(data):  # pragma: no cover
 
 def _validate_data(data):
     if not _is_allowed_data(data):
-        raise OSError('Data type is not allowed')
+        raise OSError("Data type is not allowed")

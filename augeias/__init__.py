@@ -50,27 +50,32 @@ def includeme(config):
     )
     config.add_route(
         "update_file_in_zip",
-        pattern="/collections/{collection_key}/containers/{container_key}/{object_key}/{file_name}",
+        pattern="/collections/{collection_key}/containers"
+        "/{container_key}/{object_key}/{file_name}",
         request_method="PUT",
     )
     config.add_route(
         "delete_object",
-        pattern="/collections/{collection_key}/containers/{container_key}/{object_key}",
+        pattern="/collections/{collection_key}/containers"
+        "/{container_key}/{object_key}",
         request_method="DELETE",
     )
     config.add_route(
         "get_object",
-        pattern="/collections/{collection_key}/containers/{container_key}/{object_key}",
+        pattern="/collections/{collection_key}/containers"
+        "/{container_key}/{object_key}",
         request_method="GET",
     )
     config.add_route(
         "get_object_info",
-        pattern="/collections/{collection_key}/containers/{container_key}/{object_key}/meta",
+        pattern="/collections/{collection_key}/containers"
+        "/{container_key}/{object_key}/meta",
         request_method="GET",
     )
     config.add_route(
         "get_file_from_zip",
-        pattern="/collections/{collection_key}/containers/{container_key}/{object_key}/{file_name}",
+        pattern="/collections/{collection_key}/containers"
+        "/{container_key}/{object_key}/{file_name}",
         request_method="GET",
     )
 

@@ -19,7 +19,7 @@ class Collection:
     def __init__(self, name, object_store, **kwargs):
         self.object_store = object_store
         self.name = name
-        if 'uri_generator' in kwargs:
-            self.uri_generator = kwargs.get('uri_generator')
+        if "uri_generator" in kwargs:
+            self.uri_generator = kwargs.get("uri_generator")
         else:
             self.uri_generator = DefaultUriGenerator()
