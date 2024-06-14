@@ -13,21 +13,21 @@ digital objects in an object store. While it allows you to communicate
 with you objects as a service, it also decouples the storage
 implementation from the interface.
 
-## Werken met pip-compile / pip-sync
+## How to work with pip-compile / pip-sync
 full docs: https://pip-tools.readthedocs.io/en/latest/
 
-Om te beginnen moet je eerst installeren: 
+First install the package:
 ```sh
 pip install pip-tools
 ```
 
-#### Als dev, lokaal
-Zoals altijd maak je een venv aan. Daarin run je
+#### local development
+Create a virutal environment and sync with the requirements-dev.txt file.
 
 ```sh
 pip-sync requirements-dev.txt
 ```
-Dit installeert alles inclusief libraries om testen te kunnen lopen en waitress etc.
+This will install all the packages needed for development, including testing libraries and waitress.
 
 Fast pip-compile
 ```sh

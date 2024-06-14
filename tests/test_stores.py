@@ -41,7 +41,7 @@ class TestPairTreeStore(unittest.TestCase):
 
     def test_usage_real_file(self):
         here = os.path.dirname(__file__)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         filesize = len(bdata)
@@ -61,7 +61,7 @@ class TestPairTreeStore(unittest.TestCase):
 
     def test_get_file_info(self):
         here = os.path.dirname(__file__)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         container_key = "testing"

@@ -9,7 +9,7 @@ dynamic = ["readme"]
 authors = [
     { name = "Flanders Heritage Agency", email = "ict@onroerenderfgoed.be" },
 ]
-description = "ugeias. Stores your files."
+description = "Augeias. Stores your files."
 requires-python = ">=3.10,<3.13"
 keywords = ["web", "wsgi", "pyramid", "SKOS", "thesaurus", "vocabulary"]
 classifiers = [
@@ -63,7 +63,6 @@ main = "augeias:main"
 # In the wheel we want to have augeias in the root as python module.
 only-include = [
     "/augeias",
-    "/fixtures",
 ]
 
 [tool.hatch.metadata]

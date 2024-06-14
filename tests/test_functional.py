@@ -77,7 +77,7 @@ class FunctionalTests(unittest.TestCase):
         )
         self.assertEqual("200 OK", cres.status)
 
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         res = self.testapp.put(
@@ -99,7 +99,7 @@ class FunctionalTests(unittest.TestCase):
         )
         self.assertEqual("200 OK", cres.status)
 
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         res = self.testapp.put(
@@ -128,7 +128,7 @@ class FunctionalTests(unittest.TestCase):
             + "collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID",
             cres.text,
         )
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         file_size = len(bdata)
@@ -160,7 +160,7 @@ class FunctionalTests(unittest.TestCase):
             + "collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID",
             cres.text,
         )
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -207,7 +207,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -215,7 +215,7 @@ class FunctionalTests(unittest.TestCase):
             bdata,
         )
         self.assertEqual("200 OK", ores.status)
-        testdata = os.path.join(here, "../", "fixtures/brug.jpg")
+        testdata = os.path.join(here, "fixtures/brug.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -237,14 +237,14 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/200x300", bdata
         )
         self.assertEqual("200 OK", ores.status)
-        testdata = os.path.join(here, "../", "fixtures/brug.jpg")
+        testdata = os.path.join(here, "fixtures/brug.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -281,7 +281,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -294,7 +294,7 @@ class FunctionalTests(unittest.TestCase):
             ores.text,
         )
 
-        testdata = os.path.join(here, "../", "fixtures/brug.jpg")
+        testdata = os.path.join(here, "fixtures/brug.jpg")
         with open(testdata, "rb") as f:
             ubdata = f.read()
         file_size = len(ubdata)
@@ -315,7 +315,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         res = self.testapp.put(
@@ -335,7 +335,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -449,7 +449,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         ores = self.testapp.put(
@@ -515,7 +515,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         res = self.testapp.post(
@@ -533,7 +533,7 @@ class FunctionalTests(unittest.TestCase):
     def test_update_file_in_zip(self):
         # create container and add object
         self.testapp.put("/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID")
-        with open(os.path.join(here, "../", "fixtures/test_archive.zip"), "rb") as f:
+        with open(os.path.join(here, "fixtures/test_archive.zip"), "rb") as f:
             bdata = f.read()
         self.testapp.put(
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/002", bdata
@@ -545,7 +545,7 @@ class FunctionalTests(unittest.TestCase):
         zip_file = io.BytesIO(res.body)
         with zipfile.ZipFile(zip_file) as zip_f:
             self.assertCountEqual(["brug.jpg", "kasteel.jpg"], zip_f.namelist())
-        with open(os.path.join(here, "../", "fixtures/kerk.jpg"), "rb") as f:
+        with open(os.path.join(here, "fixtures/kerk.jpg"), "rb") as f:
             new_file = f.read()
         res = self.testapp.put(
             "/collections/TEST_COLLECTION/containers/"
@@ -581,7 +581,7 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/test_archive.zip")
+        testdata = os.path.join(here, "fixtures/test_archive.zip")
         with open(testdata, "rb") as f:
             bdata = f.read()
             f.seek(0)
@@ -613,13 +613,13 @@ class FunctionalTests(unittest.TestCase):
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID"
         )
         self.assertEqual("200 OK", cres.status)
-        testdata = os.path.join(here, "../", "fixtures/kasteel.jpg")
+        testdata = os.path.join(here, "fixtures/kasteel.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         self.testapp.put(
             "/collections/TEST_COLLECTION/containers/TEST_CONTAINER_ID/001", bdata
         )
-        testdata = os.path.join(here, "../", "fixtures/brug.jpg")
+        testdata = os.path.join(here, "fixtures/brug.jpg")
         with open(testdata, "rb") as f:
             bdata = f.read()
         self.testapp.put(
