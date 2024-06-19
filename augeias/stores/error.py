@@ -10,7 +10,7 @@ class NotFoundException(Exception):
     Check the error message for more detailed information.
     """
 
-    def __init__(self, value='Nothing matching the key value was found in the store'):
+    def __init__(self, value="Nothing matching the key value was found in the store"):
         self.value = value
 
     def __str__(self):

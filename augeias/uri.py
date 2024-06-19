@@ -2,7 +2,6 @@
 This module provides utilities for working with :term:`URIS <URI>`.
 """
 
-
 from abc import ABCMeta, abstractmethod
 
 
@@ -37,7 +36,7 @@ class UriPatternGenerator(UriGenerator):
     Generate a :term:`URI` based on a simple pattern.
     """
 
-    def __init__(self, pattern, separator='/'):
+    def __init__(self, pattern, separator="/"):
         self.pattern = pattern
         self.sep = separator
 
@@ -58,18 +57,19 @@ class UriPatternGenerator(UriGenerator):
         :param container: The container.
         :rtype: string
         """
-        return self.pattern + f'{collection}{self.sep}{container}'
+        return self.pattern + f"{collection}{self.sep}{container}"
 
     def generate_object_uri(self, collection, container, object):
         """
-        Generate a :term:`URI` for collections, container and object based on parameters passed.
+        Generate a :term:`URI` for collections, container
+        and object based on parameters passed.
 
         :param collection: The collection.
         :param container: The container.
         :param object: The object.
         :rtype: string
         """
-        return self.pattern + f'{collection}{self.sep}{container}{self.sep}{object}'
+        return self.pattern + f"{collection}{self.sep}{container}{self.sep}{object}"
 
 
 class DefaultUriGenerator(UriGenerator):
@@ -79,7 +79,7 @@ class DefaultUriGenerator(UriGenerator):
     Used for providers that do not implement a specific :class:`UriGenerator`.
     """
 
-    def __init__(self, pattern='https://storage.onroerenderfgoed.be/'):
+    def __init__(self, pattern="https://storage.onroerenderfgoed.be/"):
         self.pattern = pattern
 
     def generate_collection_uri(self, collection):
@@ -89,7 +89,7 @@ class DefaultUriGenerator(UriGenerator):
         :param collection: The collection.
         :rtype: string
         """
-        return self.pattern + f'collections/{collection}'
+        return self.pattern + f"collections/{collection}"
 
     def generate_container_uri(self, collection, container):
         """
@@ -99,15 +99,18 @@ class DefaultUriGenerator(UriGenerator):
         :param container: The container.
         :rtype: string
         """
-        return self.pattern + f'collections/{collection}/containers/{container}'
+        return self.pattern + f"collections/{collection}/containers/{container}"
 
     def generate_object_uri(self, collection, container, object):
         """
-        Generate a :term:`URI` for collections, container and object based on parameters passed.
+        Generate a :term:`URI` for collections, container
+        and object based on parameters passed.
 
         :param collection: The collection.
         :param container: The container.
         :param object: The object.
         :rtype: string
         """
-        return self.pattern + f'collections/{collection}/containers/{container}/{object}'
+        return (
+            self.pattern + f"collections/{collection}/containers/{container}/{object}"
+        )
