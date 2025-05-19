@@ -12,7 +12,7 @@ def main(global_config, **settings):
     config.include('augeias')
 
     #Add collections
-    config.include('{{python_package}}.collections')
+    config.include('{{cookiecutter.python_package}}.collections')
 
     config.scan()
 
