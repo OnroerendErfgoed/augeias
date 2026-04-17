@@ -165,3 +165,9 @@ class TestCephStore(unittest.TestCase):
         self.assertEqual(None, object_list)
         self.store.update_object(container_key, object_key, "updated data")
         self.store.delete_container(container_key)
+
+    def test_get_container_data(self):
+        """Test get_container_data method of CephStore (stub implementation)"""
+        container_key = "testing"
+        container_data = self.store.get_container_data(container_key)
+        self.assertIsNone(container_data)

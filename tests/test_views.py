@@ -1,9 +1,11 @@
+import io
+import tarfile
 import unittest
 from unittest.mock import Mock
 
 from pyramid import testing
 
-from augeias.views import AugeiasView
+from augeias.views import AugeiasView, open_archive, get_archive_members
 
 
 class ViewTests(unittest.TestCase):
@@ -61,3 +63,45 @@ class ViewTests(unittest.TestCase):
                 }
             },
         )
+
+
+class TestArchiveHelpers(unittest.TestCase):
+    def test_open_archive_tar(self):
+        """Test opening a tar archive"""
+        # Create a tar archive in memory
+        tar_buffer = io.BytesIO()
+        with tarfile.open(fileobj=tar_buffer, mode="w") as tar:
+            # Add a test file to the tar
+            content = b"test content"
+            tarinfo = tarfile.TarInfo(name="test.txt")
+            tarinfo.size = len(content)
+            tar.addfile(tarinfo, io.BytesIO(content))
+        tar_buffer.seek(0)
+
+        # Test opening the tar archive
+        archive = open_archive(tar_buffer)
+        self.assertIsInstance(archive, tarfile.TarFile)
+        archive.close()
+
+    def test_get_archive_members_tar(self):
+        """Test extracting members from a tar archive"""
+        # Create a tar archive in memory
+        tar_buffer = io.BytesIO()
+        with tarfile.open(fileobj=tar_buffer, mode="w") as tar:
+            # Add test files to the tar
+            for name, content in [
+                ("file1.txt", b"content1"),
+                ("file2.txt", b"content2"),
+            ]:
+                tarinfo = tarfile.TarInfo(name=name)
+                tarinfo.size = len(content)
+                tar.addfile(tarinfo, io.BytesIO(content))
+        tar_buffer.seek(0)
+
+        # Test extracting members
+        members = list(get_archive_members(tar_buffer))
+        self.assertEqual(len(members), 2)
+        self.assertEqual(members[0][0], "file1.txt")
+        self.assertEqual(members[0][1], b"content1")
+        self.assertEqual(members[1][0], "file2.txt")
+        self.assertEqual(members[1][1], b"content2")
